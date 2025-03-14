@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom"
 import routes from "./configs/routes"
+import NotFound from "@/pages/NotFound";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             </Route>
           );
         })}
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </>
   )
