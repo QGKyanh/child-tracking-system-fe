@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import routes from './configs/routes';
 import NotFound from '@/pages/NotFound';
 import AuthProvider from '@/components/Auth/AuthProvider';
+import AuthCheck from '@/components/Auth/AuthCheck';
 
 function App() {
   return (
@@ -18,7 +19,14 @@ function App() {
                   <Route
                     key={item.path}
                     path={item.path}
-                    element={<Component />}
+                    element={
+                      <AuthCheck
+                        shouldLogin={item?.authSlice?.shouldLogin}
+                        shouldLogout={item?.authSlice?.shouldLogout}
+                      >
+                        <Component />
+                      </AuthCheck>
+                    }
                   />
                 );
               })}
