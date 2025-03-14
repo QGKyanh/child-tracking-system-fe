@@ -9,7 +9,7 @@ const baseQuery = fetchBaseQuery({
   credentials: 'include', // Send cookies with every request
   prepareHeaders: (headers, { getState }) => {
     // Get the token from auth state if available
-    const token = getState().auth?.accessToken;
+    const token = getState().authSlice?.accessToken;
 
     if (token) {
       headers.set('Authorization', `Bearer ${token}`);

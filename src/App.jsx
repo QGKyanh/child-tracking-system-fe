@@ -1,10 +1,11 @@
-import { Route, Routes } from "react-router-dom"
-import routes from "./configs/routes"
-import NotFound from "@/pages/NotFound";
+import { Route, Routes } from 'react-router-dom';
+import routes from './configs/routes';
+import NotFound from '@/pages/NotFound';
+import AuthProvider from '@/components/Auth/AuthProvider';
 
 function App() {
   return (
-    <>
+    <AuthProvider>
       <Routes>
         {routes.map((route, i) => {
           const Layout = route.layout;
@@ -17,9 +18,7 @@ function App() {
                   <Route
                     key={item.path}
                     path={item.path}
-                    element={
-                      <Component />
-                    }
+                    element={<Component />}
                   />
                 );
               })}
@@ -28,8 +27,8 @@ function App() {
         })}
         <Route path='*' element={<NotFound />} />
       </Routes>
-    </>
-  )
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;

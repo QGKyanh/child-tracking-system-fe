@@ -7,7 +7,7 @@ const LoginPage = () => {
     <Box py={10} px={4} minH='100vh' display='flex' flexDirection='column'>
       <VStack spacing={8} mb={8}>
         <Heading as='h1' size='xl'>
-          Đăng nhập
+          Login
         </Heading>
       </VStack>
       <LoginForm />

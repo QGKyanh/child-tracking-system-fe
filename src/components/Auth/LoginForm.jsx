@@ -29,10 +29,14 @@ const LoginForm = () => {
         onSubmit={async (data, { setSubmitting }) => {
           try {
             const result = await login(data).unwrap();
-            console.log('Login response:', result); // Log the response to see its structure
+            console.log('Login response:', result);
 
-            // Pass the accessToken directly
+            // Store the access token
             dispatch(loginSlice({ accessToken: result.accessToken }));
+
+            // Manually trigger a refetch of user info
+            // This will cause the AuthProvider to update the user data
+            dispatch({ type: 'api/invalidateTags', payload: ['Auth'] });
 
             toast({
               title: 'Đăng nhập thành công',
@@ -84,7 +88,7 @@ const LoginForm = () => {
                 disabled={formikProps.isSubmitting || isLoading}
                 isLoading={formikProps.isSubmitting || isLoading}
                 type='submit'
-                bg={'#74bc1f'}
+                bg={'#3498DB'}
                 w='full'
               >
                 Đăng nhập

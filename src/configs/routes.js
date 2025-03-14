@@ -1,3 +1,4 @@
+import LogoutHandler from '@/components/Auth/LogoutHandler';
 import MainLayout from '@/components/Layout/MainLayout';
 import SimpleLayout from '@/components/Layout/SimpleLayout';
 import HomePage from '@/pages/HomePage';
@@ -22,6 +23,11 @@ const routes = [
         path: '/login',
         component: LoginPage,
         title: 'Login',
+      },
+      {
+        path: '/logout',
+        component: LogoutHandler,
+        title: 'Logout',
       },
     ],
   },

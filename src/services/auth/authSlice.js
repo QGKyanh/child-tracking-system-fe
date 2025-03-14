@@ -21,7 +21,7 @@ const initialState = {
   isAuthenticated: !!accessToken,
 };
 
-const auth = createSlice({
+const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
@@ -57,5 +57,12 @@ const auth = createSlice({
   },
 });
 
-export const { login, logout, refreshToken, setUser } = auth.actions;
-export default auth.reducer;
+// Export actions
+export const { login, logout, refreshToken, setUser } = authSlice.actions;
+
+export const selectIsAuthenticated = state =>
+  state.authSlice?.isAuthenticated || false;
+export const selectCurrentUser = state => state.authSlice?.user || null;
+export const selectAccessToken = state => state.authSlice?.accessToken || null;
+
+export default authSlice.reducer;
