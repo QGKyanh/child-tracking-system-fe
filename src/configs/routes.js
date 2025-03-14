@@ -1,5 +1,7 @@
 import MainLayout from '@/components/Layout/MainLayout';
+import SimpleLayout from '@/components/Layout/SimpleLayout';
 import HomePage from '@/pages/HomePage';
+import LoginPage from '@/pages/LoginPage';
 
 const routes = [
   {
@@ -10,6 +12,16 @@ const routes = [
         isIndex: true,
         component: HomePage,
         title: 'Home',
+      },
+    ],
+  },
+  {
+    layout: SimpleLayout,
+    data: [
+      {
+        path: '/login',
+        component: LoginPage,
+        title: 'Login',
       },
     ],
   },
