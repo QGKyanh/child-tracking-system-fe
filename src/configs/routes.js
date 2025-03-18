@@ -3,6 +3,7 @@ import MainLayout from '@/components/Layout/MainLayout';
 import SimpleLayout from '@/components/Layout/SimpleLayout';
 import HomePage from '@/pages/HomePage';
 import LoginPage from '@/pages/LoginPage';
+import MembershipPage from '@/pages/MembershipPage';
 
 const routes = [
   {
@@ -13,6 +14,11 @@ const routes = [
         isIndex: true,
         component: HomePage,
         title: 'Home',
+      },
+      {
+        path: '/plans',
+        component: MembershipPage,
+        title: 'Membership',
       },
     ],
   },

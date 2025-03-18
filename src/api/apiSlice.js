@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { logout, refreshToken } from '@/services/auth/authSlice';
 import { Mutex } from 'async-mutex';
 
 // Create a mutex for token refreshing
@@ -40,18 +41,16 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
           extraOptions
         );
 
-        if (refreshResult.data) {
-          // Store the new token
-          api.dispatch({
-            type: 'authSlice/setCredentials',
-            payload: { accessToken: refreshResult.data.accessToken },
-          });
+        // Check if we got a new access token
+        if (refreshResult.data && refreshResult.data.accessToken) {
+          // Store the new token in Redux
+          api.dispatch(refreshToken(refreshResult.data.accessToken));
 
           // Retry the original request
           result = await baseQuery(args, api, extraOptions);
         } else {
           // If refresh fails, log out
-          api.dispatch({ type: 'authSlice/logout' });
+          api.dispatch(logout());
         }
       } finally {
         // Release the mutex
@@ -64,7 +63,6 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
       result = await baseQuery(args, api, extraOptions);
     }
   }
-
   return result;
 };
 

@@ -41,11 +41,24 @@ const authSlice = createSlice({
       localStorage.setItem('user', JSON.stringify(action.payload));
     },
     logout: state => {
+      // Clear Redux state
       state.accessToken = null;
       state.user = null;
       state.isAuthenticated = false;
+
+      // Clear localStorage
       localStorage.removeItem('accessToken');
       localStorage.removeItem('user');
+
+      // Clear cookies
+      document.cookie =
+        'accessToken=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=Strict';
+      document.cookie =
+        'refreshToken=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=Strict';
+      document.cookie =
+        'connect.sid=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=None';
+      document.cookie =
+        'sessionId=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=Strict';
     },
     refreshToken: (state, action) => {
       if (action.payload) {
