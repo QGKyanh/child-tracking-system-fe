@@ -15,6 +15,8 @@ import {
 } from '@chakra-ui/react';
 import { ViewIcon, EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import { format } from 'date-fns';
+import { Link as RouterLink } from 'react-router-dom';
+import { FaChartLine } from 'react-icons/fa';
 
 const ChildCard = ({ child, onView, onEdit, onDelete }) => {
   // Card styling
@@ -116,6 +118,16 @@ const ChildCard = ({ child, onView, onEdit, onDelete }) => {
             colorScheme='blue'
             onClick={() => onView(child)}
             aria-label='View details'
+          />
+        </Tooltip>
+        <Tooltip label='Growth Charts'>
+          <IconButton
+            as={RouterLink}
+            to={`/growth-charts/${child._id}`}
+            icon={<FaChartLine />}
+            variant='ghost'
+            colorScheme='teal'
+            aria-label='View growth charts'
           />
         </Tooltip>
         <Tooltip label='Edit'>

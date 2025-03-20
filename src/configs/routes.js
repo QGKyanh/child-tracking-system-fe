@@ -6,6 +6,7 @@ import GoogleCallback from '@/pages/GoogleCallback';
 import HomePage from '@/pages/HomePage';
 import LoginPage from '@/pages/LoginPage';
 import MembershipPage from '@/pages/MembershipPage';
+import GrowthChartPage from '@/pages/GrowthChartPage';
 
 const routes = [
   {
@@ -26,6 +27,16 @@ const routes = [
         path: '/children',
         component: ChildPage,
         title: 'Child Management',
+      },
+      {
+        path: '/growth-charts',
+        component: GrowthChartPage,
+        title: 'Growth Charts',
+      },
+      {
+        path: '/growth-charts/:childId',
+        component: GrowthChartPage,
+        title: 'Growth Charts',
       },
     ],
   },
