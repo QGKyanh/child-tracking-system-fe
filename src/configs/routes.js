@@ -1,6 +1,7 @@
 import LogoutHandler from '@/components/Auth/LogoutHandler';
 import MainLayout from '@/components/Layout/MainLayout';
 import SimpleLayout from '@/components/Layout/SimpleLayout';
+import ChildPage from '@/pages/ChildPage';
 import GoogleCallback from '@/pages/GoogleCallback';
 import HomePage from '@/pages/HomePage';
 import LoginPage from '@/pages/LoginPage';
@@ -20,6 +21,11 @@ const routes = [
         path: '/plans',
         component: MembershipPage,
         title: 'Membership',
+      },
+      {
+        path: '/children',
+        component: ChildPage,
+        title: 'Child Management',
       },
     ],
   },
