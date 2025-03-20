@@ -28,7 +28,7 @@ import { format } from 'date-fns';
 import { useGetChildByIdQuery } from '@/services/child/childApi';
 import { useEffect } from 'react';
 
-const ChildDetail = ({ isOpen, onClose, child, onEdit }) => {
+const ChildDetail = ({ isOpen, onClose, childId, onEdit }) => {
   // Skip the query if modal is closed or no child is selected
   const {
     data: childResponse,
@@ -36,14 +36,14 @@ const ChildDetail = ({ isOpen, onClose, child, onEdit }) => {
     isError,
     error,
     refetch,
-  } = useGetChildByIdQuery(child?._id, { skip: !isOpen || !child?._id });
+  } = useGetChildByIdQuery(childId, { skip: !isOpen || !childId });
 
   // Refetch when modal opens with a new child ID
   useEffect(() => {
-    if (isOpen && child?._id) {
+    if (isOpen && childId) {
       refetch();
     }
-  }, [isOpen, child?._id, refetch]);
+  }, [isOpen, childId, refetch]);
 
   // Calculate age from birthdate
   const calculateAge = birthDate => {
@@ -77,10 +77,7 @@ const ChildDetail = ({ isOpen, onClose, child, onEdit }) => {
   };
 
   // Get the child data from the response
-  const childDetail = childResponse?.child;
-
-  // Use either the fetched detail or the passed child prop
-  const displayChild = childDetail || child;
+  const child = childResponse?.child;
 
   if (!isOpen) return null;
 
@@ -123,7 +120,7 @@ const ChildDetail = ({ isOpen, onClose, child, onEdit }) => {
     );
   }
 
-  if (!displayChild) return null;
+  if (!child) return null;
 
   // Safely format date or return fallback
   const formatDate = (dateString, formatStr = 'PPP') => {
@@ -138,10 +135,9 @@ const ChildDetail = ({ isOpen, onClose, child, onEdit }) => {
 
   // Handle allergies which can be string or array
   const allergiesArray = (() => {
-    if (!displayChild.allergies) return [];
-    if (typeof displayChild.allergies === 'string')
-      return [displayChild.allergies];
-    return Array.isArray(displayChild.allergies) ? displayChild.allergies : [];
+    if (!child.allergies) return [];
+    if (typeof child.allergies === 'string') return [child.allergies];
+    return Array.isArray(child.allergies) ? child.allergies : [];
   })();
 
   return (
@@ -156,7 +152,7 @@ const ChildDetail = ({ isOpen, onClose, child, onEdit }) => {
               aria-label='Edit child'
               size='sm'
               colorScheme='blue'
-              onClick={() => onEdit(displayChild)}
+              onClick={onEdit}
             />
           </Flex>
         </ModalHeader>
@@ -166,22 +162,22 @@ const ChildDetail = ({ isOpen, onClose, child, onEdit }) => {
             <Flex align='center' mb={2}>
               <Avatar
                 size='xl'
-                name={displayChild.name}
-                bg={displayChild.gender === 0 ? 'blue.400' : 'pink.400'}
+                name={child.name}
+                bg={child.gender === 0 ? 'blue.400' : 'pink.400'}
                 color='white'
                 mr={6}
               />
               <Box>
-                <Heading size='lg'>{displayChild.name}</Heading>
+                <Heading size='lg'>{child.name}</Heading>
                 <Badge
-                  colorScheme={displayChild.gender === 0 ? 'blue' : 'pink'}
+                  colorScheme={child.gender === 0 ? 'blue' : 'pink'}
                   fontSize='0.9em'
                   mt={1}
                 >
-                  {displayChild.gender === 0 ? 'Boy' : 'Girl'}
+                  {child.gender === 0 ? 'Boy' : 'Girl'}
                 </Badge>
                 <Text mt={2} fontSize='lg' color='gray.600'>
-                  {calculateAge(displayChild.birthDate)}
+                  {calculateAge(child.birthDate)}
                 </Text>
               </Box>
             </Flex>
@@ -193,22 +189,22 @@ const ChildDetail = ({ isOpen, onClose, child, onEdit }) => {
                 <Text fontWeight='bold' fontSize='sm' color='gray.500'>
                   Birth Date
                 </Text>
-                <Text>{formatDate(displayChild.birthDate)}</Text>
+                <Text>{formatDate(child.birthDate)}</Text>
               </Box>
 
               <Box>
                 <Text fontWeight='bold' fontSize='sm' color='gray.500'>
                   Relationship
                 </Text>
-                <Text>{displayChild.relationships?.[0]?.type || 'Parent'}</Text>
+                <Text>{child.relationships?.[0]?.type || 'Parent'}</Text>
               </Box>
 
-              {displayChild.feedingType && (
+              {child.feedingType && (
                 <Box>
                   <Text fontWeight='bold' fontSize='sm' color='gray.500'>
                     Feeding Type
                   </Text>
-                  <Text>{displayChild.feedingType}</Text>
+                  <Text>{child.feedingType}</Text>
                 </Box>
               )}
 
@@ -233,14 +229,14 @@ const ChildDetail = ({ isOpen, onClose, child, onEdit }) => {
               )}
             </SimpleGrid>
 
-            {displayChild.note && (
+            {child.note && (
               <>
                 <Divider />
                 <Box>
                   <Text fontWeight='bold' fontSize='sm' color='gray.500'>
                     Notes
                   </Text>
-                  <Text whiteSpace='pre-wrap'>{displayChild.note}</Text>
+                  <Text whiteSpace='pre-wrap'>{child.note}</Text>
                 </Box>
               </>
             )}
@@ -251,7 +247,7 @@ const ChildDetail = ({ isOpen, onClose, child, onEdit }) => {
               <Text fontWeight='bold' fontSize='sm' color='gray.500'>
                 Added On
               </Text>
-              <Text>{formatDate(displayChild.createdAt)}</Text>
+              <Text>{formatDate(child.createdAt)}</Text>
             </Box>
           </VStack>
         </ModalBody>
