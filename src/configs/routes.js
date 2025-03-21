@@ -27,6 +27,7 @@ const routes = [
         path: '/children',
         component: ChildPage,
         title: 'Child Management',
+        shouldLogin: true,
       },
       {
         path: '/growth-charts',
