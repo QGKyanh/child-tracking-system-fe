@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Box,
   Container,
@@ -14,6 +14,15 @@ import {
   Center,
   Alert,
   AlertIcon,
+  useToast,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  Button,
+  CircularProgress,
 } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import { ChevronRightIcon } from '@chakra-ui/icons';
@@ -23,54 +32,139 @@ import { useGetUserInfoQuery } from '@/services/auth/authApi';
 import { useGetDoctorRequestsQuery, useUpdateRequestStatusMutation } from '@/services/doctor/doctorApi';
 
 const DoctorRequestPage = () => {
-  // Lấy thông tin bác sĩ
   const { data: userInfo, isLoading: isUserLoading, isError: isUserError } = useGetUserInfoQuery();
   const [doctorId, setDoctorId] = useState(null);
 
-  // Cập nhật doctorId khi userInfo có giá trị
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [confirmData, setConfirmData] = useState({ requestId: null, status: "" });
+  const [isLoading, setIsLoading] = useState(false); // Track loading state
+  const cancelRef = useRef();
+  const toast = useToast();
+
   useEffect(() => {
     if (userInfo?._id) {
+      console.log("User Info found, setting doctorId:", userInfo._id);
       setDoctorId(userInfo._id);
     }
   }, [userInfo]);
-  console.log(doctorId);
 
-  // Fetch danh sách requests của bác sĩ
   const { data: requests, isLoading: isRequestsLoading, isError, error, refetch } =
-    useGetDoctorRequestsQuery(doctorId, { skip: !doctorId });
+    useGetDoctorRequestsQuery({ doctorId }, { skip: !doctorId });
+
+  console.log("Doctor ID:", doctorId); 
+  console.log("Danh sách requests:", requests);
 
   const [selectedRequestId, setSelectedRequestId] = useState(null);
+  const [selectedChildId, setSelectedChildId] = useState(null);
   const detailModal = useDisclosure();
   const [updateRequestStatus] = useUpdateRequestStatusMutation();
 
   const handleViewRequest = (requestId) => {
-    setSelectedRequestId(requestId);
-    detailModal.onOpen();
-  };
-
-  const handleUpdateStatus = async (requestId, status) => {
-    try {
-      await updateRequestStatus({ id: requestId, status }).unwrap();
-      refetch();
-    } catch (err) {
-      console.error('Failed to update request status:', err);
+    // Find request object by ID
+    const request = requests?.find((req) => req._id === requestId);
+  
+    if (request) {
+      setSelectedRequestId(requestId);
+  
+      // Ensure there's at least one child ID before setting
+      if (request.childIds && request.childIds.length > 0) {
+        setSelectedChildId(request.childIds[0]); // Assign first childId
+      } else {
+        console.warn("No childId found for request:", requestId);
+        setSelectedChildId(null);
+      }
+      
+      detailModal.onOpen();
+    } else {
+      console.error("Request not found for ID:", requestId);
     }
   };
+  
+  
 
-  // Debug logs để kiểm tra dữ liệu
-  console.log("Doctor ID:", doctorId);
-  console.log("Requests:", requests?.requests);
+  const handleUpdateStatus = (requestId, status) => {
+    setConfirmData({ requestId, status });
+    setIsConfirmOpen(true);
+  };
+
+  const handleConfirmUpdate = async () => {
+    setIsLoading(true); // Start loading
+    setIsConfirmOpen(false); // Close modal immediately
+
+    try {
+      await updateRequestStatus({
+        id: confirmData.requestId,
+        status: confirmData.status,
+      }).unwrap();
+
+      toast({
+        title: `Request has been ${confirmData.status === "Accepted" ? "approved" : "rejected"}.`,
+        status: confirmData.status === "Accepted" ? "success" : "warning",
+        duration: 1000,
+        isClosable: true,
+      });
+
+      setTimeout(() => {
+        setIsLoading(false); // Stop loading after update
+        refetch();
+      }, 1000);
+    } catch (err) {
+      setIsLoading(false); // Stop loading in case of error
+
+      toast({
+        title: "Error updating request status.",
+        description: err.data?.message || "An error occurred.",
+        status: "error",
+        duration: 1000,
+        isClosable: true,
+      });
+    }
+  };
 
   if (isUserLoading) return <p>Loading doctor information...</p>;
   if (isUserError || !doctorId) return <p>Error: Doctor ID not found</p>;
 
   return (
     <Box>
-      <Container maxW='container.xl' pt={4} pb={10}>
+      {/* Confirmation Dialog */}
+      <AlertDialog
+        isOpen={isConfirmOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={() => setIsConfirmOpen(false)}
+        isCentered
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Confirm Status Update
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              Are you sure you want to {confirmData.status === "Accepted" ? "approve" : "reject"} this request?
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={() => setIsConfirmOpen(false)} isDisabled={isLoading}>
+                Cancel
+              </Button>
+              <Button
+                colorScheme={confirmData.status === "Accepted" ? "green" : "red"}
+                onClick={handleConfirmUpdate}
+                ml={3}
+                isDisabled={isLoading}
+              >
+                {isLoading ? <CircularProgress isIndeterminate size="24px" color="white" /> : "Confirm"}
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+
+      <Container maxW="container.xl" pt={4} pb={10}>
         {/* Breadcrumb */}
-        <Breadcrumb spacing='8px' separator={<ChevronRightIcon color='gray.500' />} mb={6}>
+        <Breadcrumb spacing="8px" separator={<ChevronRightIcon color="gray.500" />} mb={6}>
           <BreadcrumbItem>
-            <BreadcrumbLink as={RouterLink} to='/'>Home</BreadcrumbLink>
+            <BreadcrumbLink as={RouterLink} to="/">Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem isCurrentPage>
             <BreadcrumbLink>Doctor Requests</BreadcrumbLink>
@@ -79,10 +173,10 @@ const DoctorRequestPage = () => {
 
         {/* Page Header */}
         <Box mb={8}>
-          <Flex justify='space-between' align='center'>
+          <Flex justify="space-between" align="center">
             <Box>
-              <Heading size='xl' mb={2}>Doctor Requests</Heading>
-              <Text color={useColorModeValue('gray.600', 'gray.400')}>
+              <Heading size="xl" mb={2}>Doctor Requests</Heading>
+              <Text color={useColorModeValue("gray.600", "gray.400")}>
                 Manage and review patient requests
               </Text>
             </Box>
@@ -91,20 +185,19 @@ const DoctorRequestPage = () => {
 
         {/* Loading/Error States */}
         {isRequestsLoading ? (
-          <Center h='300px'>
-            <Spinner thickness='4px' speed='0.65s' emptyColor='gray.200' color='blue.500' size='xl' />
+          <Center h="300px">
+            <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
           </Center>
         ) : isError ? (
-          <Alert status='error'>
+          <Alert status="error">
             <AlertIcon />
-            Error loading requests: {error?.data?.message || 'Unknown error'}
+            Error loading requests: {error?.data?.message || "Unknown error"}
           </Alert>
         ) : requests.length === 0 ? (
-          <Center h='200px'>
+          <Center h="200px">
             <Text fontSize="lg" color="gray.500">No requests found for this doctor.</Text>
           </Center>
         ) : (
-          /* Doctor Requests List Component */
           <DoctorRequestList
             requests={requests}
             onView={handleViewRequest}
@@ -116,7 +209,7 @@ const DoctorRequestPage = () => {
         <DoctorRequestDetail
           isOpen={detailModal.isOpen}
           onClose={detailModal.onClose}
-          requestId={selectedRequestId}
+          childId={selectedChildId}
         />
       </Container>
     </Box>

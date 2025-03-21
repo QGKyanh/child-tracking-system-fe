@@ -5,7 +5,7 @@ const doctorApi = apiSlice.injectEndpoints({
         // 🟢 Lấy danh sách requests của bác sĩ theo ID và tham số phân trang, sắp xếp
         getDoctorRequests: build.query({
           query: ({ doctorId, page = 1, size = 10, order = 'ascending', sortBy = 'date', as = 'DOCTOR' }) => ({
-            url: `/requests/users/67d501c63ba174cc4cbc95b1`,
+            url: `/requests/users/${doctorId}`,
             method: 'GET',
             params: new URLSearchParams({ page, size, order, sortBy, as }).toString(),
           }),
