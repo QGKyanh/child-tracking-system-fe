@@ -55,6 +55,7 @@ const DoctorRequestPage = () => {
   console.log("Danh sách requests:", requests);
 
   const [selectedRequestId, setSelectedRequestId] = useState(null);
+
   const [selectedChildId, setSelectedChildId] = useState(null);
   const detailModal = useDisclosure();
   const [updateRequestStatus] = useUpdateRequestStatusMutation();
@@ -82,10 +83,26 @@ const DoctorRequestPage = () => {
   
   
 
-  const handleUpdateStatus = (requestId, status) => {
-    setConfirmData({ requestId, status });
-    setIsConfirmOpen(true);
+  const handleUpdateStatus = (requestId, newStatus) => {
+    // Tìm request có requestId tương ứng
+    const request = requests?.find((req) => req._id === requestId);
+  
+    if (!request) {
+      console.error("Request not found for ID:", requestId);
+      return;
+    }
+  
+    // Chỉ cho phép thay đổi từ "Pending" sang "Accepted" hoặc "Rejected"
+    if (request.status === "Pending" && (newStatus === "Accepted" || newStatus === "Rejected")) {
+      setConfirmData({ requestId, status: newStatus });
+      setIsConfirmOpen(true);
+    } else {
+      console.warn("Status update not allowed: Can only change from 'Pending' to 'Accepted' or 'Rejected'.");
+    }
   };
+  
+  
+
 
   const handleConfirmUpdate = async () => {
     setIsLoading(true); // Start loading
