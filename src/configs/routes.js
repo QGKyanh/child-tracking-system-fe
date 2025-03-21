@@ -7,6 +7,7 @@ import HomePage from '@/pages/HomePage';
 import LoginPage from '@/pages/LoginPage';
 import MembershipPage from '@/pages/MembershipPage';
 import GrowthChartPage from '@/pages/GrowthChartPage';
+import DoctorRequestPage from '@/pages/DoctorRequestPage'; // Import trang Doctor
 
 const routes = [
   {
@@ -15,8 +16,8 @@ const routes = [
       {
         path: '/',
         isIndex: true,
-        component: HomePage,
-        title: 'Home',
+        component: DoctorRequestPage, // Trang mặc định là DoctorRequestPage
+        title: 'Doctor Requests',
       },
       {
         path: '/plans',
