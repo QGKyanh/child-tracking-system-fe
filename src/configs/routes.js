@@ -28,6 +28,7 @@ const routes = [
         path: '/children',
         component: ChildPage,
         title: 'Child Management',
+        shouldLogin: true,
       },
       {
         path: '/children/:childId',         // Route mới cho trang Child details
