@@ -7,8 +7,8 @@ import HomePage from '@/pages/HomePage';
 import LoginPage from '@/pages/LoginPage';
 import MembershipPage from '@/pages/MembershipPage';
 import GrowthChartPage from '@/pages/GrowthChartPage';
-import DoctorRequestPage from '@/pages/DoctorRequestPage'; // Import trang Doctor
-
+import DoctorRequestPage from '@/pages/DoctorRequestPage'; // Import trang Doctor'@/components/Child/ChildCard';
+import ChildDetail from '@/components/Child/ChildDetail';
 const routes = [
   {
     layout: MainLayout,
@@ -28,6 +28,11 @@ const routes = [
         path: '/children',
         component: ChildPage,
         title: 'Child Management',
+      },
+      {
+        path: '/children/:childId',         // Route mới cho trang Child details
+        component: ChildDetail,
+        title: 'Child Detail',
       },
       {
         path: '/growth-charts',

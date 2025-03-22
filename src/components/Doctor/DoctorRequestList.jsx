@@ -11,10 +11,12 @@ import {
   Flex,
   Stack,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 const DoctorRequestList = ({ requests, onView, onUpdateStatus }) => {
   const itemsPerPage = 4;
   const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate(); // ✅ Khởi tạo navigate
 
   const totalPages = Math.ceil(requests.length / itemsPerPage);
   const displayedRequests = requests.slice(
@@ -33,6 +35,7 @@ const DoctorRequestList = ({ requests, onView, onUpdateStatus }) => {
       <VStack spacing={4} align="stretch">
         {displayedRequests.map((request) => {
           const isPending = request.status === "Pending";
+          const childId = request.childIds?.[0]; // Lấy ID đứa trẻ từ request
 
           return (
             <Box
@@ -74,36 +77,50 @@ const DoctorRequestList = ({ requests, onView, onUpdateStatus }) => {
               <Divider />
 
               {/* Bottom Actions */}
-              <Flex justify="flex-end" gap={2} mt={3}>
-                <Button colorScheme="blue" size="sm" onClick={() => onView(request._id)}>
-                  View Details
+              <Flex justify="space-between" align="center" mt={3}>
+                {/* 👇 Bottom left - View child */}
+                <Button
+                  size="sm"
+                  variant="outline"
+                  colorScheme="gray"
+                  onClick={() => navigate(`/children/${request.childIds?.[0]}`)}
+                  isDisabled={!childId}
+                >
+                  View Child
                 </Button>
 
-                {isPending && (
-                  <>
-                    <Button
-                      colorScheme="green"
-                      size="sm"
-                      onClick={() => onUpdateStatus(request._id, "Accepted")}
-                    >
-                      Accept
-                    </Button>
-                    <Button
-                      colorScheme="red"
-                      size="sm"
-                      onClick={() => onUpdateStatus(request._id, "Rejected")}
-                    >
-                      Reject
-                    </Button>
-                  </>
-                )}
+                {/* 👇 Bottom right - Actions */}
+                <HStack spacing={2}>
+                  <Button colorScheme="blue" size="sm" onClick={() => onView(request._id)}>
+                    View Details
+                  </Button>
+
+                  {isPending && (
+                    <>
+                      <Button
+                        colorScheme="green"
+                        size="sm"
+                        onClick={() => onUpdateStatus(request._id, "Accepted")}
+                      >
+                        Accept
+                      </Button>
+                      <Button
+                        colorScheme="red"
+                        size="sm"
+                        onClick={() => onUpdateStatus(request._id, "Rejected")}
+                      >
+                        Reject
+                      </Button>
+                    </>
+                  )}
+                </HStack>
               </Flex>
             </Box>
           );
         })}
       </VStack>
 
-      {/* Pagination as numbered buttons */}
+      {/* Pagination */}
       <HStack justify="center" mt={6} wrap="wrap">
         {Array.from({ length: totalPages }, (_, index) => (
           <Button
@@ -122,3 +139,6 @@ const DoctorRequestList = ({ requests, onView, onUpdateStatus }) => {
 };
 
 export default DoctorRequestList;
+
+
+
