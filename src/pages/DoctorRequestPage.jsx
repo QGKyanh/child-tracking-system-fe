@@ -178,15 +178,6 @@ const DoctorRequestPage = () => {
       </AlertDialog>
 
       <Container maxW="container.xl" pt={4} pb={10}>
-        {/* Breadcrumb */}
-        <Breadcrumb spacing="8px" separator={<ChevronRightIcon color="gray.500" />} mb={6}>
-          <BreadcrumbItem>
-            <BreadcrumbLink as={RouterLink} to="/">Home</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbItem isCurrentPage>
-            <BreadcrumbLink>Doctor Requests</BreadcrumbLink>
-          </BreadcrumbItem>
-        </Breadcrumb>
 
         {/* Page Header */}
         <Box mb={8}>

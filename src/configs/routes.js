@@ -7,8 +7,9 @@ import HomePage from '@/pages/HomePage';
 import LoginPage from '@/pages/LoginPage';
 import MembershipPage from '@/pages/MembershipPage';
 import GrowthChartPage from '@/pages/GrowthChartPage';
-import DoctorRequestPage from '@/pages/DoctorRequestPage'; // Import trang Doctor'@/components/Child/ChildCard';
+import DoctorRequestPage from '@/pages/DoctorRequestPage';
 import ChildDetail from '@/components/Child/ChildDetail';
+
 const routes = [
   {
     layout: MainLayout,
@@ -16,8 +17,22 @@ const routes = [
       {
         path: '/',
         isIndex: true,
-        component: DoctorRequestPage, // Trang mặc định là DoctorRequestPage
+        component: HomePage,
+        title: 'Home',
+      },
+      {
+        path: '/doctor/requests',
+        component: DoctorRequestPage,
         title: 'Doctor Requests',
+        shouldLogin: true,
+        role: 2
+      },
+      {
+        path: '/doctor/consultations',
+        component: DoctorRequestPage, // Thay bằng ConsultationPage khi có
+        title: 'Consultations',
+        shouldLogin: true,
+        role: 2
       },
       {
         path: '/plans',
@@ -29,21 +44,28 @@ const routes = [
         component: ChildPage,
         title: 'Child Management',
         shouldLogin: true,
+        role: 1
       },
       {
-        path: '/children/:childId',         // Route mới cho trang Child details
+        path: '/children/:childId',
         component: ChildDetail,
         title: 'Child Detail',
+        shouldLogin: true,
+        role: 1
       },
       {
         path: '/growth-charts',
         component: GrowthChartPage,
         title: 'Growth Charts',
+        shouldLogin: true,
+        role: 1
       },
       {
         path: '/growth-charts/:childId',
         component: GrowthChartPage,
         title: 'Growth Charts',
+        shouldLogin: true,
+        role: 1
       },
     ],
   },

@@ -32,9 +32,9 @@ const Navbar = () => {
   const userRole = user?.role;
 
   const baseNavItems = [
-    { label: 'Home', href: '/' },
     ...(userRole !== 2
       ? [
+          { label: 'Home', href: '/' },
           {
             label: 'Features',
             children: [
@@ -64,13 +64,15 @@ const Navbar = () => {
               { label: 'User Guide', subLabel: 'How to use the platform', href: '/user-guide' },
             ],
           },
+          { label: 'Contact', href: '/contact' },
         ]
       : [
           { label: 'Doctor Requests', href: '/doctor/requests' },
-          { label: 'Consultations', href: '/doctor/consultations' },
+          { label: 'Doctor Consultations', href: '/doctor/consultations' },
+          { label: 'Blog', href: '/blog' },
         ]),
-    { label: 'Contact', href: '/contact' },
   ];
+
 
   const bgColor = useColorModeValue('#ffffff', '#283747');
   const textColor = useColorModeValue('#2C3E50', '#ECF0F1');
