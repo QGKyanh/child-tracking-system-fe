@@ -8,27 +8,22 @@ import {
   Button,
   Badge,
   Divider,
-  IconButton,
+  Flex,
+  Stack,
 } from "@chakra-ui/react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 
 const DoctorRequestList = ({ requests, onView, onUpdateStatus }) => {
   const itemsPerPage = 4;
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Xác định tổng số trang
   const totalPages = Math.ceil(requests.length / itemsPerPage);
   const displayedRequests = requests.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-  };
-
-  const handlePrevPage = () => {
-    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   if (!requests.length) return <Text>No requests available.</Text>;
@@ -37,7 +32,7 @@ const DoctorRequestList = ({ requests, onView, onUpdateStatus }) => {
     <Box>
       <VStack spacing={4} align="stretch">
         {displayedRequests.map((request) => {
-          const isPending = request.status === "Pending"; // Chỉ cho phép thao tác khi là Pending
+          const isPending = request.status === "Pending";
 
           return (
             <Box
@@ -49,34 +44,38 @@ const DoctorRequestList = ({ requests, onView, onUpdateStatus }) => {
               transition="all 0.3s"
               _hover={{ boxShadow: "xl", transform: "scale(1.02)" }}
             >
-              <HStack spacing={4}>
-                <Avatar src={request.member.avatar || "/default-avatar.png"} />
-                <Box flex="1">
-                  <Text fontWeight="bold">{request.member.name}</Text>
-                  <Text fontSize="sm" color="gray.500">
-                    {new Date(request.createdAt).toLocaleDateString()}
-                  </Text>
-                  <Badge
-                    colorScheme={
-                      request.status === "Accepted"
-                        ? "green"
-                        : request.status === "Rejected"
-                        ? "red"
-                        : "yellow"
-                    }
-                  >
-                    {request.status}
-                  </Badge>
-                </Box>
-              </HStack>
-              <Text mt={2}>{request.title}</Text>
-              <Divider my={2} />
-              <HStack spacing={2}>
-                <Button
-                  colorScheme="blue"
-                  size="sm"
-                  onClick={() => onView(request._id)}
+              {/* Top Section */}
+              <Flex justify="space-between" align="flex-start" mb={2}>
+                <HStack spacing={4}>
+                  <Avatar src={request.member.avatar || "/default-avatar.png"} />
+                  <Box>
+                    <Text fontWeight="bold">{request.member.name}</Text>
+                    <Text fontSize="sm" color="gray.500">
+                      {new Date(request.createdAt).toLocaleDateString()}
+                    </Text>
+                  </Box>
+                </HStack>
+                <Badge
+                  colorScheme={
+                    request.status === "Accepted"
+                      ? "green"
+                      : request.status === "Rejected"
+                      ? "red"
+                      : "yellow"
+                  }
                 >
+                  {request.status}
+                </Badge>
+              </Flex>
+
+              {/* Message */}
+              <Text mt={2} mb={3}>{request.title}</Text>
+
+              <Divider />
+
+              {/* Bottom Actions */}
+              <Flex justify="flex-end" gap={2} mt={3}>
+                <Button colorScheme="blue" size="sm" onClick={() => onView(request._id)}>
                   View Details
                 </Button>
 
@@ -98,27 +97,25 @@ const DoctorRequestList = ({ requests, onView, onUpdateStatus }) => {
                     </Button>
                   </>
                 )}
-              </HStack>
+              </Flex>
             </Box>
           );
         })}
       </VStack>
 
-      {/* Pagination */}
-      <HStack justify="center" mt={4}>
-        <IconButton
-          icon={<ChevronLeftIcon />}
-          isDisabled={currentPage === 1}
-          onClick={handlePrevPage}
-        />
-        <Text>
-          Page {currentPage} of {totalPages}
-        </Text>
-        <IconButton
-          icon={<ChevronRightIcon />}
-          isDisabled={currentPage === totalPages}
-          onClick={handleNextPage}
-        />
+      {/* Pagination as numbered buttons */}
+      <HStack justify="center" mt={6} wrap="wrap">
+        {Array.from({ length: totalPages }, (_, index) => (
+          <Button
+            key={index}
+            size="sm"
+            variant={currentPage === index + 1 ? "solid" : "outline"}
+            colorScheme="blue"
+            onClick={() => handlePageChange(index + 1)}
+          >
+            {index + 1}
+          </Button>
+        ))}
       </HStack>
     </Box>
   );
