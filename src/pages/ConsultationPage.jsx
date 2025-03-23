@@ -129,12 +129,14 @@ import {
     const parent = item?.requestDetails?.member?.name?.toLowerCase() || '';
     const child = item?.requestDetails?.children?.[0]?.name?.toLowerCase() || '';
     const term = searchTerm.toLowerCase();
-
+    const doctorName = item?.doctor?.name?.toLowerCase() || '';
+    console.log("consultations:",consultations);
     return (
     
       title.includes(term) ||
       parent.includes(term) ||
-      child.includes(term)
+      child.includes(term) ||
+      doctorName.includes(term)
     );
   })
   .map((item, index) => (
@@ -149,40 +151,53 @@ import {
                 maxW="4xl"
                 _hover={{ boxShadow: 'lg' }}
               >
-                <Flex justify="space-between" align="center" mb={2}>
-                  <Box>
-                    <Text fontWeight="bold">
-                      {index + 1}. {item.requestDetails.title || 'Consultation Request'}
-                    </Text>
-                    <Text fontSize="sm" color="gray.600">
-                      Submitted: {formatDate(item.createdAt)}
-                    </Text>
-                    <Text fontSize="sm" color="gray.600">
-                      Parent: {item.requestDetails.member.name}
-                    </Text>
-                    {item.requestDetails.children?.[0]?.birthDate && (
-                      <Text fontSize="sm" color="gray.600">
-                        Child: {item.requestDetails.children[0].name} - Age: {calculateAge(item.requestDetails.children[0].birthDate)}
-                      </Text>
-                    )}
+              <Flex justify="space-between" align="flex-start" mb={2}>
+  <Box>
+    <Text fontWeight="bold">
+      {index + 1}. {item.requestDetails.title || 'Consultation Request'}
+    </Text>
+    <Text fontSize="sm" color="gray.600">
+      Submitted: {formatDate(item.createdAt)}
+    </Text>
+    <Text fontSize="sm" color="gray.600">
+      Parent: {item.requestDetails.member.name}
+    </Text>
+
+    {item.requestDetails.children?.[0]?.birthDate && (
+      <Text fontSize="sm" color="gray.600">
+        Child: {item.requestDetails.children[0].name} - Age: {calculateAge(item.requestDetails.children[0].birthDate)}
+      </Text>
+    )}
+
+    <Button
+      size="sm"
+      colorScheme="teal"
+      variant="outline"
+      mt={2}
+      onClick={() => navigate(`/consultation-chat/${item._id}`, { state: { index: index + 1 } })}
+    >
+      Message
+    </Button>
+  </Box>
+
+  <VStack align="flex-end" spacing={2}>
+    {role !== 2 && item?.requestDetails?.doctor && (
+    <VStack spacing={1} align="center" mt={4}>
+    <Avatar size="sm" name={item.requestDetails.doctor.name} src={item.requestDetails.doctor.avatar} />
+    <Text fontSize="sm" color="gray.600" textAlign="center">
+      Doctor: {item.requestDetails?.doctor.name}
+    </Text>
+  </VStack>
   
-                    <Button
-                      size="sm"
-                      colorScheme="teal"
-                      variant="outline"
-                      mt={2}
-                      onClick={() => navigate(`/consultation-chat/${item._id}`, { state: { index: index + 1 } })}
-                    >
-                      Message
-                    </Button>
-                  </Box>
-  
-                  {role === 2 && (
-                    <Button colorScheme="blue" onClick={() => handleOpen(item)}>
-                      View
-                    </Button>
-                  )}
-                </Flex>
+    )}
+    {role === 2 && (
+      <Button size="sm" colorScheme="blue" onClick={() => handleOpen(item)}>
+        View
+      </Button>
+    )}
+  </VStack>
+</Flex>
+
               </Box>
             ))}
           </VStack>
