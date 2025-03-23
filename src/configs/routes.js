@@ -9,12 +9,8 @@ import MembershipPage from '@/pages/MembershipPage';
 import GrowthChartPage from '@/pages/GrowthChartPage';
 import DoctorRequestPage from '@/pages/DoctorRequestPage';
 import ChildDetail from '@/components/Child/ChildDetail';
-<<<<<<< Updated upstream
-
-=======
 import ConsultationPage from '@/pages/ConsultationPage';
 import ConsultationChatPage from '@/pages/ConsultationChatPage';
->>>>>>> Stashed changes
 const routes = [
   {
     layout: MainLayout,
@@ -32,13 +28,13 @@ const routes = [
         shouldLogin: true,
         role: 2
       },
-      {
-        path: '/doctor/consultations',
-        component: DoctorRequestPage, // Thay bằng ConsultationPage khi có
-        title: 'Consultations',
-        shouldLogin: true,
-        role: 2
-      },
+      // {
+      //   path: '/doctor/consultations',
+      //   component: DoctorRequestPage, // Thay bằng ConsultationPage khi có
+      //   title: 'Consultations',
+      //   shouldLogin: true,
+      //   role: 2
+      // },
       {
         path: '/plans',
         component: MembershipPage,
@@ -73,12 +69,12 @@ const routes = [
         role: 1
       },
       {
-        path: '/doctor/consultations',
+        path: '/consultations',
         component: ConsultationPage,
         title: 'Consultations',
       },
       {
-        path: '/doctor/consultation-chat/:consultationId',
+        path: '/consultation-chat/:consultationId',
         component: ConsultationChatPage, 
         title: 'Consultation Chat Detail',
       },

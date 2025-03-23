@@ -79,7 +79,7 @@ import {
         <HStack mb={4}>
           <IconButton
             icon={<ArrowBackIcon />}
-            onClick={() => navigate('/doctor/consultations')}
+            onClick={() => navigate('/consultations')}
             aria-label="Back"
             variant="ghost"
           />

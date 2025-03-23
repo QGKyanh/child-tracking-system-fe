@@ -66,26 +66,16 @@ const Navbar = () => {
               { label: 'User Guide', subLabel: 'How to use the platform', href: '/user-guide' },
             ],
           },
-<<<<<<< Updated upstream
-          { label: 'Contact', href: '/contact' },
+          { label: 'Consultations', href: '/consultations' },
         ]
       : [
           { label: 'Doctor Requests', href: '/doctor/requests' },
-          { label: 'Doctor Consultations', href: '/doctor/consultations' },
+          { label: 'Consultations', href: '/consultations' },
           { label: 'Blog', href: '/blog' },
-        ]),
-=======
-          { label: 'Consultations', href: '/doctor/consultations' },
-        ]
-      : [
-          { label: 'Doctor Requests', href: '/doctor/requests' },
-          { label: 'Consultations', href: '/doctor/consultations' },
-          // { label: 'Consultation Messenger', href: '/doctor/consultation-message' },
         ]),
     { label: 'Contact', href: '/contact' },
     
 
->>>>>>> Stashed changes
   ];
 
 

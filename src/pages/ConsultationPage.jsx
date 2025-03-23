@@ -171,7 +171,7 @@ import {
                       colorScheme="teal"
                       variant="outline"
                       mt={2}
-                      onClick={() => navigate(`/doctor/consultation-chat/${item._id}`, { state: { index: index + 1 } })}
+                      onClick={() => navigate(`/consultation-chat/${item._id}`, { state: { index: index + 1 } })}
                     >
                       Message
                     </Button>
