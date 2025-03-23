@@ -29,6 +29,7 @@ const Navbar = () => {
   const { isOpen, onToggle } = useDisclosure();
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const user = useSelector(selectCurrentUser);
+
   const userRole = user?.role;
 
   const baseNavItems = [
@@ -53,6 +54,7 @@ const Navbar = () => {
                 subLabel: 'Share with healthcare providers',
                 href: '/features/data-sharing',
               },
+              
             ],
           },
           { label: 'Membership Plans', href: '/plans' },
@@ -64,6 +66,7 @@ const Navbar = () => {
               { label: 'User Guide', subLabel: 'How to use the platform', href: '/user-guide' },
             ],
           },
+<<<<<<< Updated upstream
           { label: 'Contact', href: '/contact' },
         ]
       : [
@@ -71,6 +74,18 @@ const Navbar = () => {
           { label: 'Doctor Consultations', href: '/doctor/consultations' },
           { label: 'Blog', href: '/blog' },
         ]),
+=======
+          { label: 'Consultations', href: '/doctor/consultations' },
+        ]
+      : [
+          { label: 'Doctor Requests', href: '/doctor/requests' },
+          { label: 'Consultations', href: '/doctor/consultations' },
+          // { label: 'Consultation Messenger', href: '/doctor/consultation-message' },
+        ]),
+    { label: 'Contact', href: '/contact' },
+    
+
+>>>>>>> Stashed changes
   ];
 
 

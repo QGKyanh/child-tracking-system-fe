@@ -9,7 +9,12 @@ import MembershipPage from '@/pages/MembershipPage';
 import GrowthChartPage from '@/pages/GrowthChartPage';
 import DoctorRequestPage from '@/pages/DoctorRequestPage';
 import ChildDetail from '@/components/Child/ChildDetail';
+<<<<<<< Updated upstream
 
+=======
+import ConsultationPage from '@/pages/ConsultationPage';
+import ConsultationChatPage from '@/pages/ConsultationChatPage';
+>>>>>>> Stashed changes
 const routes = [
   {
     layout: MainLayout,
@@ -67,6 +72,17 @@ const routes = [
         shouldLogin: true,
         role: 1
       },
+      {
+        path: '/doctor/consultations',
+        component: ConsultationPage,
+        title: 'Consultations',
+      },
+      {
+        path: '/doctor/consultation-chat/:consultationId',
+        component: ConsultationChatPage, 
+        title: 'Consultation Chat Detail',
+      },
+      
     ],
   },
   {
