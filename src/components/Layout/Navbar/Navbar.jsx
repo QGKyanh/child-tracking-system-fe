@@ -54,16 +54,27 @@ const Navbar = () => {
                 subLabel: 'Share with healthcare providers',
                 href: '/features/data-sharing',
               },
-              
             ],
           },
           { label: 'Membership Plans', href: '/plans' },
           {
             label: 'Resources',
             children: [
-              { label: 'Blog', subLabel: 'Latest articles on child development', href: '/blog' },
-              { label: 'FAQs', subLabel: 'Common questions and answers', href: '/faqs' },
-              { label: 'User Guide', subLabel: 'How to use the platform', href: '/user-guide' },
+              {
+                label: 'Blog',
+                subLabel: 'Latest articles on child development',
+                href: '/blog',
+              },
+              {
+                label: 'FAQs',
+                subLabel: 'Common questions and answers',
+                href: '/faqs',
+              },
+              {
+                label: 'User Guide',
+                subLabel: 'How to use the platform',
+                href: '/user-guide',
+              },
             ],
           },
           { label: 'Consultations', href: '/consultations' },
@@ -74,10 +85,7 @@ const Navbar = () => {
           { label: 'Blog', href: '/blog' },
         ]),
     { label: 'Contact', href: '/contact' },
-    
-
   ];
-
 
   const bgColor = useColorModeValue('#ffffff', '#283747');
   const textColor = useColorModeValue('#2C3E50', '#ECF0F1');
@@ -87,11 +95,28 @@ const Navbar = () => {
   return (
     <Box position='sticky' top='0' zIndex='sticky' bg={bgColor} boxShadow='sm'>
       <Container maxW='container.xl'>
-        <Flex color={textColor} minH={'60px'} py={{ base: 2 }} px={{ base: 4 }} align={'center'} justify='space-between'>
-          <Flex flex={{ base: 1, md: 'auto' }} ml={{ base: -2 }} display={{ base: 'flex', md: 'none' }}>
+        <Flex
+          color={textColor}
+          minH={'60px'}
+          py={{ base: 2 }}
+          px={{ base: 4 }}
+          align={'center'}
+          justify='space-between'
+        >
+          <Flex
+            flex={{ base: 1, md: 'auto' }}
+            ml={{ base: -2 }}
+            display={{ base: 'flex', md: 'none' }}
+          >
             <IconButton
               onClick={onToggle}
-              icon={isOpen ? <CloseIcon w={3} h={3} /> : <HamburgerIcon w={5} h={5} />}
+              icon={
+                isOpen ? (
+                  <CloseIcon w={3} h={3} />
+                ) : (
+                  <HamburgerIcon w={5} h={5} />
+                )
+              }
               variant={'ghost'}
               aria-label={'Toggle Navigation'}
             />
@@ -100,8 +125,20 @@ const Navbar = () => {
           <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
             <RouterLink to='/'>
               <Flex align='center'>
-                <Image src='src/assets/react.svg' alt='GrowthGuardian Logo' boxSize='40px' fallbackSrc='https://via.placeholder.com/40x40?text=GG' />
-                <Text ml={2} fontFamily={'heading'} fontWeight='bold' color={textColor}>GrowthGuardian</Text>
+                <Image
+                  src='src/assets/react.svg'
+                  alt='GrowthGuardian Logo'
+                  boxSize='40px'
+                  fallbackSrc='https://via.placeholder.com/40x40?text=GG'
+                />
+                <Text
+                  ml={2}
+                  fontFamily={'heading'}
+                  fontWeight='bold'
+                  color={textColor}
+                >
+                  GrowthGuardian
+                </Text>
               </Flex>
             </RouterLink>
             <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
@@ -109,28 +146,72 @@ const Navbar = () => {
             </Flex>
           </Flex>
 
-          <Stack flex={{ base: 1, md: 0 }} justify={'flex-end'} direction={'row'} spacing={6}>
+          <Stack
+            flex={{ base: 1, md: 0 }}
+            justify={'flex-end'}
+            direction={'row'}
+            spacing={6}
+          >
             {isAuthenticated ? (
               <Menu>
                 <MenuButton as={Button} variant='ghost' p={0}>
-                  <Avatar size='sm' name={user?.name || 'User'} src={user?.avatar || undefined} />
+                  <Avatar
+                    size='sm'
+                    name={user?.name || 'User'}
+                    src={user?.avatar || undefined}
+                  />
                 </MenuButton>
                 <MenuList>
-                  {userRole !== 2 && (
-                    <MenuItem as={RouterLink} to='/dashboard'>Dashboard</MenuItem>
+                  {/* {userRole === 2 && (
+                    <MenuItem as={RouterLink} to='/dashboard'>
+                      Dashboard
+                    </MenuItem>
+                  )} */}
+                  <MenuItem as={RouterLink} to='/profile'>
+                    My Profile
+                  </MenuItem>
+                  {userRole === 0 && (
+                    <MenuItem as={RouterLink} to='/children'>
+                      My Children
+                    </MenuItem>
                   )}
-                  <MenuItem as={RouterLink} to='/profile'>My Profile</MenuItem>
-                  {userRole !== 2 && (
-                    <MenuItem as={RouterLink} to='/children'>My Children</MenuItem>
+                  {userRole === 0 && (
+                    <MenuItem as={RouterLink} to='/user/requests'>
+                      My Requests
+                    </MenuItem>
                   )}
-                  <MenuItem as={RouterLink} to='/settings'>Settings</MenuItem>
-                  <MenuItem as={RouterLink} to='/logout'>Logout</MenuItem>
+                  <MenuItem as={RouterLink} to='/settings'>
+                    Settings
+                  </MenuItem>
+                  <MenuItem as={RouterLink} to='/logout'>
+                    Logout
+                  </MenuItem>
                 </MenuList>
               </Menu>
             ) : (
               <>
-                <Button as={RouterLink} to='/login' fontSize={'sm'} fontWeight={400} variant={'outline'} colorScheme='blue'>Sign In</Button>
-                <Button as={RouterLink} to='/register' display={{ base: 'none', md: 'inline-flex' }} fontSize={'sm'} fontWeight={600} color={'white'} bg={primaryColor} _hover={{ bg: `${accentColor}` }}>Sign Up</Button>
+                <Button
+                  as={RouterLink}
+                  to='/login'
+                  fontSize={'sm'}
+                  fontWeight={400}
+                  variant={'outline'}
+                  colorScheme='blue'
+                >
+                  Sign In
+                </Button>
+                <Button
+                  as={RouterLink}
+                  to='/register'
+                  display={{ base: 'none', md: 'inline-flex' }}
+                  fontSize={'sm'}
+                  fontWeight={600}
+                  color={'white'}
+                  bg={primaryColor}
+                  _hover={{ bg: `${accentColor}` }}
+                >
+                  Sign Up
+                </Button>
               </>
             )}
           </Stack>
@@ -155,7 +236,14 @@ const DesktopNav = ({ navItems }) => {
         <Box key={navItem.label}>
           {navItem.children ? (
             <Menu>
-              <MenuButton as={Button} variant='ghost' p={2} fontWeight={500} color={linkColor} rightIcon={<ChevronDownIcon />}>
+              <MenuButton
+                as={Button}
+                variant='ghost'
+                p={2}
+                fontWeight={500}
+                color={linkColor}
+                rightIcon={<ChevronDownIcon />}
+              >
                 {navItem.label}
               </MenuButton>
               <MenuList bg={popoverContentBgColor}>
@@ -163,14 +251,24 @@ const DesktopNav = ({ navItems }) => {
                   <MenuItem key={child.label} as={RouterLink} to={child.href}>
                     <Box>
                       <Text fontWeight={500}>{child.label}</Text>
-                      <Text fontSize={'sm'} opacity={0.8}>{child.subLabel}</Text>
+                      <Text fontSize={'sm'} opacity={0.8}>
+                        {child.subLabel}
+                      </Text>
                     </Box>
                   </MenuItem>
                 ))}
               </MenuList>
             </Menu>
           ) : (
-            <Box as={RouterLink} to={navItem.href} p={2} fontSize={'sm'} fontWeight={500} color={linkColor} _hover={{ textDecoration: 'none', color: linkHoverColor }}>
+            <Box
+              as={RouterLink}
+              to={navItem.href}
+              p={2}
+              fontSize={'sm'}
+              fontWeight={500}
+              color={linkColor}
+              _hover={{ textDecoration: 'none', color: linkHoverColor }}
+            >
               {navItem.label}
             </Box>
           )}
@@ -182,7 +280,11 @@ const DesktopNav = ({ navItems }) => {
 
 const MobileNav = ({ navItems }) => {
   return (
-    <Stack bg={useColorModeValue('white', 'gray.800')} p={4} display={{ md: 'none' }}>
+    <Stack
+      bg={useColorModeValue('white', 'gray.800')}
+      p={4}
+      display={{ md: 'none' }}
+    >
       {navItems.map(navItem => (
         <MobileNavItem key={navItem.label} {...navItem} />
       ))}
@@ -195,8 +297,17 @@ const MobileNavItem = ({ label, children, href }) => {
 
   return (
     <Stack spacing={4} onClick={children && onToggle}>
-      <Flex py={2} as={RouterLink} to={href ?? '#'} justify={'space-between'} align={'center'} _hover={{ textDecoration: 'none' }}>
-        <Text fontWeight={600} color={useColorModeValue('#2C3E50', 'gray.200')}>{label}</Text>
+      <Flex
+        py={2}
+        as={RouterLink}
+        to={href ?? '#'}
+        justify={'space-between'}
+        align={'center'}
+        _hover={{ textDecoration: 'none' }}
+      >
+        <Text fontWeight={600} color={useColorModeValue('#2C3E50', 'gray.200')}>
+          {label}
+        </Text>
         {children && (
           <IconButton
             icon={<ChevronDownIcon />}

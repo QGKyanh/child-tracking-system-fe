@@ -11,6 +11,7 @@ import DoctorRequestPage from '@/pages/DoctorRequestPage';
 import ChildDetail from '@/components/Child/ChildDetail';
 import ConsultationPage from '@/pages/ConsultationPage';
 import ConsultationChatPage from '@/pages/ConsultationChatPage';
+import ListDoctorPage from '@/pages/ListDoctorPage';
 const routes = [
   {
     layout: MainLayout,
@@ -28,13 +29,6 @@ const routes = [
         shouldLogin: true,
         role: 2,
       },
-      // {
-      //   path: '/doctor/consultations',
-      //   component: DoctorRequestPage, // Thay bằng ConsultationPage khi có
-      //   title: 'Consultations',
-      //   shouldLogin: true,
-      //   role: 2
-      // },
       {
         path: '/plans',
         component: MembershipPage,
@@ -77,6 +71,11 @@ const routes = [
         path: '/consultation-chat/:consultationId',
         component: ConsultationChatPage,
         title: 'Consultation Chat Detail',
+      },
+      {
+        path: '/contact',
+        component: ListDoctorPage,
+        title: 'Contact',
       },
     ],
   },

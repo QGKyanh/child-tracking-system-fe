@@ -1,21 +1,34 @@
 import { apiSlice } from '@/api/apiSlice';
 
 const doctorApi = apiSlice.injectEndpoints({
-    endpoints: (build) => ({
-        // 🟢 Lấy danh sách requests của bác sĩ theo ID và tham số phân trang, sắp xếp
-        getDoctorRequests: build.query({
-          query: ({ doctorId, page = 1, size = 10, order = 'ascending', sortBy = 'date', as = 'DOCTOR' }) => ({
-            url: `/requests/users/${doctorId}`,
-            method: 'GET',
-            params: new URLSearchParams({ page, size, order, sortBy, as }).toString(),
-          }),
-          transformResponse: (res) => res?.requests?.requests || [],
-          providesTags: ['Request'],
-        }),
+  endpoints: build => ({
+    // 🟢 Lấy danh sách requests của bác sĩ theo ID và tham số phân trang, sắp xếp
+    getDoctorRequests: build.query({
+      query: ({
+        doctorId,
+        page = 1,
+        size = 10,
+        order = 'ascending',
+        sortBy = 'date',
+        as = 'DOCTOR',
+      }) => ({
+        url: `/requests/users/${doctorId}`,
+        method: 'GET',
+        params: new URLSearchParams({
+          page,
+          size,
+          order,
+          sortBy,
+          as,
+        }).toString(),
+      }),
+      transformResponse: res => res?.requests?.requests || [],
+      providesTags: ['Request'],
+    }),
 
     // 🟢 Cập nhật trạng thái request
     updateRequestStatus: build.mutation({
-      query: (data) => ({
+      query: data => ({
         url: `/requests/status/${data.id}`,
         method: 'PUT',
         body: data,
@@ -25,21 +38,21 @@ const doctorApi = apiSlice.injectEndpoints({
 
     // 🟢 Lấy chi tiết một request theo request ID
     getRequestById: build.query({
-      query: (id) => ({
+      query: id => ({
         url: `/requests/${id}`,
         method: 'GET',
       }),
-      transformResponse: (res) => res.data || res,
+      transformResponse: res => res.data || res,
       providesTags: ['Request'],
     }),
 
     // 🟢 Lấy dữ liệu tăng trưởng của trẻ
     getChildGrowthData: build.query({
-      query: (childId) => ({
+      query: childId => ({
         url: `/children/${childId}/growth-data`,
         method: 'GET',
       }),
-      transformResponse: (res) => res.data || res,
+      transformResponse: res => res.data || res,
       providesTags: ['Child'],
     }),
   }),
