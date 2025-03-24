@@ -7,6 +7,7 @@ import HomePage from '@/pages/HomePage';
 import LoginPage from '@/pages/LoginPage';
 import MembershipPage from '@/pages/MembershipPage';
 import GrowthChartPage from '@/pages/GrowthChartPage';
+import ProfilePage from '@/pages/ProfilePage';
 import DoctorRequestPage from '@/pages/DoctorRequestPage';
 import ChildDetail from '@/components/Child/ChildDetail';
 import ConsultationPage from '@/pages/ConsultationPage';
@@ -36,6 +37,12 @@ const routes = [
         path: '/plans',
         component: MembershipPage,
         title: 'Membership',
+      },
+      {
+        path: '/profile',
+        component: ProfilePage,
+        title: 'Profile',
+        shouldLogin: true,
       },
       {
         path: '/children',

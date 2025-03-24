@@ -24,11 +24,14 @@ const userApi = apiSlice.injectEndpoints({
       providesTags: ['User'],
     }),
     updateUser: build.mutation({
-      query: data => ({
-        url: '/users',
-        method: 'PATCH',
-        body: data,
-      }),
+      query: data => {
+        const id = data.get('id');
+        return {
+          url: `/users/${id}`,
+          method: 'PATCH',
+          body: data,
+        };
+      },
       invalidatesTags: ['User'],
     }),
   }),
