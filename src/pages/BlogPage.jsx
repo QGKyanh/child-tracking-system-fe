@@ -2,12 +2,16 @@ import BlogModal from '@/components/Blogs/BlogModal';
 import { useGetListBlogsQuery } from '@/services/blogs/blogApi';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import {
+  Alert,
+  AlertIcon,
   Box,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   Button,
+  Center,
   Container,
+  Spinner,
   useDisclosure,
 } from '@chakra-ui/react';
 import React from 'react';
@@ -53,7 +57,7 @@ export default function BlogPage() {
           ) : isError ? (
             <Alert status='error'>
               <AlertIcon />
-              Error loading children: {error?.data?.message || 'Unknown error'}
+              Error loading blogs: {error?.data?.message || 'Unknown error'}
             </Alert>
           ) : (
             <></>

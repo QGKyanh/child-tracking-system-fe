@@ -7,12 +7,15 @@ import HomePage from '@/pages/HomePage';
 import LoginPage from '@/pages/LoginPage';
 import MembershipPage from '@/pages/MembershipPage';
 import GrowthChartPage from '@/pages/GrowthChartPage';
+import ProfilePage from '@/pages/ProfilePage';
 import DoctorRequestPage from '@/pages/DoctorRequestPage';
 import ChildDetail from '@/components/Child/ChildDetail';
 import ConsultationPage from '@/pages/ConsultationPage';
 import ConsultationChatPage from '@/pages/ConsultationChatPage';
 import ListDoctorPage from '@/pages/ListDoctorPage';
 import MyRequestPage from '@/pages/MyRequestPage';
+import FAQ from '@/pages/FAQ';
+import AboutUs from '@/pages/AboutUs';
 import BlogPage from '@/pages/BlogPage';
 const routes = [
   {
@@ -35,6 +38,12 @@ const routes = [
         path: '/plans',
         component: MembershipPage,
         title: 'Membership',
+      },
+      {
+        path: '/profile',
+        component: ProfilePage,
+        title: 'Profile',
+        shouldLogin: true,
       },
       {
         path: '/children',
@@ -84,6 +93,16 @@ const routes = [
         component: MyRequestPage,
         title: 'My Requests',
         shouldLogin: true,
+      },
+      {
+        path: '/faqs',
+        component: FAQ,
+        title: 'FAQ',
+      },
+      {
+        path: '/about',
+        component: AboutUs,
+        title: 'About',
       },
       {
         path: '/blog',
