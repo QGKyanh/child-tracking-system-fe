@@ -30,7 +30,6 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.3.0",
     "swiper": "^11.2.6",
-    "recharts": "^2.15.1",
     "yup": "^1.6.1"
   },
   "devDependencies": {
