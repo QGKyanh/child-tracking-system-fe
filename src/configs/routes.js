@@ -13,6 +13,7 @@ import ConsultationPage from '@/pages/ConsultationPage';
 import ConsultationChatPage from '@/pages/ConsultationChatPage';
 import ListDoctorPage from '@/pages/ListDoctorPage';
 import MyRequestPage from '@/pages/MyRequestPage';
+import BlogPage from '@/pages/BlogPage';
 const routes = [
   {
     layout: MainLayout,
@@ -83,6 +84,12 @@ const routes = [
         component: MyRequestPage,
         title: 'My Requests',
         shouldLogin: true,
+      },
+      {
+        path: '/blog',
+        component: BlogPage,
+        title: 'Blogs',
+        shouldLogin: false,
       },
     ],
   },
