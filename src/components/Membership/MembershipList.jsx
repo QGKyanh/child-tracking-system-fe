@@ -79,9 +79,6 @@ export default function MembershipList({
                       Growth Data Entries:{' '}
                       {membership.updateChildDataLimit || 0}
                     </Text>
-                    <Text>
-                      Downloadable Charts: {membership.downloadChart || 0}
-                    </Text>
                   </VStack>
                   <Flex gap={5} justifyContent='space-evenly'>
                     <Button
