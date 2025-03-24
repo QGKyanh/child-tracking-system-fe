@@ -4,11 +4,9 @@ import { Mutex } from 'async-mutex';
 
 // Create a mutex for token refreshing
 const mutex = new Mutex();
-const API_BASE_URL = import.meta.env.VITE_API_ENDPOINT || "http://localhost:4000";
-console.log("API BASE URL:", API_BASE_URL);
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: `${API_BASE_URL}/api`,
+  baseUrl: import.meta.env.VITE_API_ENDPOINT + '/api',
   credentials: 'include', // Send cookies with every request
   prepareHeaders: (headers, { getState }) => {
     // Get the token from auth state if available
