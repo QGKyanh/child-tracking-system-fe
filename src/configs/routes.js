@@ -12,6 +12,7 @@ import ChildDetail from '@/components/Child/ChildDetail';
 import ConsultationPage from '@/pages/ConsultationPage';
 import ConsultationChatPage from '@/pages/ConsultationChatPage';
 import ListDoctorPage from '@/pages/ListDoctorPage';
+import MyRequestPage from '@/pages/MyRequestPage';
 const routes = [
   {
     layout: MainLayout,
@@ -76,6 +77,12 @@ const routes = [
         path: '/contact',
         component: ListDoctorPage,
         title: 'Contact',
+      },
+      {
+        path: '/user/requests',
+        component: MyRequestPage,
+        title: 'My Requests',
+        shouldLogin: true,
       },
     ],
   },
