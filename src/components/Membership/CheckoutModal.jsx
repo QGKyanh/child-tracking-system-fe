@@ -170,7 +170,6 @@ export default function CheckoutModal({
                   <Text>
                     Growth Data Entries: {membership.updateChildDataLimit}
                   </Text>
-                  <Text>Downloadable Charts: {membership.downloadChart}</Text>
                 </Stack>
               </Box>
               <Box p={2} color='black' borderRadius='md' shadow='sm'>

@@ -25,72 +25,72 @@ import {
   selectCurrentUser,
 } from '@/services/auth/authSlice';
 
-// NAV ITEMS
-const NAV_ITEMS = [
-  {
-    label: 'Home',
-    href: '/',
-  },
-  {
-    label: 'Features',
-    children: [
-      {
-        label: 'Growth Tracking',
-        subLabel: "Track your child's growth metrics",
-        href: '/features/growth-tracking',
-      },
-      {
-        label: 'Growth Charts',
-        subLabel: 'Visualize development progress',
-        href: '/features/growth-charts',
-      },
-      {
-        label: 'Data Sharing',
-        subLabel: 'Share with healthcare providers',
-        href: '/features/data-sharing',
-      },
-    ],
-  },
-  {
-    label: 'Membership Plans',
-    href: '/plans',
-  },
-  {
-    label: 'Resources',
-    children: [
-      {
-        label: 'Blog',
-        subLabel: 'Latest articles on child development',
-        href: '/blog',
-      },
-      {
-        label: 'FAQs',
-        subLabel: 'Common questions and answers',
-        href: '/faqs',
-      },
-      {
-        label: 'User Guide',
-        subLabel: 'How to use the platform',
-        href: '/user-guide',
-      },
-    ],
-  },
-  {
-    label: 'Contact',
-    href: '/contact',
-  },
-];
-
 const Navbar = () => {
   const { isOpen, onToggle } = useDisclosure();
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const user = useSelector(selectCurrentUser);
 
-  // Color scheme - warm, trustworthy colors for parents
+  const userRole = user?.role;
+
+  const baseNavItems = [
+    ...(userRole !== 2
+      ? [
+          { label: 'Home', href: '/' },
+          {
+            label: 'Features',
+            children: [
+              {
+                label: 'Growth Tracking',
+                subLabel: "Track your child's growth metrics",
+                href: '/features/growth-tracking',
+              },
+              {
+                label: 'Growth Charts',
+                subLabel: 'Visualize development progress',
+                href: '/features/growth-charts',
+              },
+              {
+                label: 'Data Sharing',
+                subLabel: 'Share with healthcare providers',
+                href: '/features/data-sharing',
+              },
+            ],
+          },
+          { label: 'Membership Plans', href: '/plans' },
+          {
+            label: 'Resources',
+            children: [
+              {
+                label: 'Blog',
+                subLabel: 'Latest articles on child development',
+                href: '/blog',
+              },
+              {
+                label: 'FAQs',
+                subLabel: 'Common questions and answers',
+                href: '/faqs',
+              },
+              {
+                label: 'User Guide',
+                subLabel: 'How to use the platform',
+                href: '/user-guide',
+              },
+            ],
+          },
+          { label: 'Consultations', href: '/consultations' },
+        ]
+      : [
+          { label: 'Doctor Requests', href: '/doctor/requests' },
+          { label: 'Consultations', href: '/consultations' },
+          { label: 'Blog', href: '/blog' },
+        ]),
+    { label: 'Contact', href: '/contact' },
+  ];
+
   const bgColor = useColorModeValue('#ffffff', '#283747');
   const textColor = useColorModeValue('#2C3E50', '#ECF0F1');
-  const primaryColor = '#3498DB'; // A calming blue
-  const accentColor = '#27AE60'; // A nurturing green
+  const primaryColor = '#3498DB';
+  const accentColor = '#27AE60';
 
   return (
     <Box position='sticky' top='0' zIndex='sticky' bg={bgColor} boxShadow='sm'>
@@ -121,6 +121,7 @@ const Navbar = () => {
               aria-label={'Toggle Navigation'}
             />
           </Flex>
+
           <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
             <RouterLink to='/'>
               <Flex align='center'>
@@ -132,7 +133,6 @@ const Navbar = () => {
                 />
                 <Text
                   ml={2}
-                  textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
                   fontFamily={'heading'}
                   fontWeight='bold'
                   color={textColor}
@@ -141,9 +141,8 @@ const Navbar = () => {
                 </Text>
               </Flex>
             </RouterLink>
-
             <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
-              <DesktopNav navItems={NAV_ITEMS} />
+              <DesktopNav navItems={baseNavItems} />
             </Flex>
           </Flex>
 
@@ -163,15 +162,24 @@ const Navbar = () => {
                   />
                 </MenuButton>
                 <MenuList>
-                  <MenuItem as={RouterLink} to='/dashboard'>
-                    Dashboard
-                  </MenuItem>
+                  {/* {userRole === 2 && (
+                    <MenuItem as={RouterLink} to='/dashboard'>
+                      Dashboard
+                    </MenuItem>
+                  )} */}
                   <MenuItem as={RouterLink} to='/profile'>
                     My Profile
                   </MenuItem>
-                  <MenuItem as={RouterLink} to='/children'>
-                    My Children
-                  </MenuItem>
+                  {userRole === 0 && (
+                    <MenuItem as={RouterLink} to='/children'>
+                      My Children
+                    </MenuItem>
+                  )}
+                  {userRole === 0 && (
+                    <MenuItem as={RouterLink} to='/user/requests'>
+                      My Requests
+                    </MenuItem>
+                  )}
                   <MenuItem as={RouterLink} to='/settings'>
                     Settings
                   </MenuItem>
@@ -200,9 +208,7 @@ const Navbar = () => {
                   fontWeight={600}
                   color={'white'}
                   bg={primaryColor}
-                  _hover={{
-                    bg: `${accentColor}`,
-                  }}
+                  _hover={{ bg: `${accentColor}` }}
                 >
                   Sign Up
                 </Button>
@@ -212,7 +218,7 @@ const Navbar = () => {
         </Flex>
 
         <Collapse in={isOpen} animateOpacity>
-          <MobileNav navItems={NAV_ITEMS} />
+          <MobileNav navItems={baseNavItems} />
         </Collapse>
       </Container>
     </Box>
@@ -261,10 +267,7 @@ const DesktopNav = ({ navItems }) => {
               fontSize={'sm'}
               fontWeight={500}
               color={linkColor}
-              _hover={{
-                textDecoration: 'none',
-                color: linkHoverColor,
-              }}
+              _hover={{ textDecoration: 'none', color: linkHoverColor }}
             >
               {navItem.label}
             </Box>
@@ -300,9 +303,7 @@ const MobileNavItem = ({ label, children, href }) => {
         to={href ?? '#'}
         justify={'space-between'}
         align={'center'}
-        _hover={{
-          textDecoration: 'none',
-        }}
+        _hover={{ textDecoration: 'none' }}
       >
         <Text fontWeight={600} color={useColorModeValue('#2C3E50', 'gray.200')}>
           {label}
