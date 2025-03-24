@@ -17,7 +17,8 @@ import {
 const FAQ = () => {
   const faqItems = [
     {
-      question: "Các đối tượng có mức độ hoạt động thể lực khác điều chỉnh thực đơn như thế nào?",
+      question:
+        'Các đối tượng có mức độ hoạt động thể lực khác điều chỉnh thực đơn như thế nào?',
       answer: (
         <>
           <Text mb={4}>
@@ -57,7 +58,7 @@ const FAQ = () => {
             Lượng thực phẩm bạn cần ăn = 9/10 so với lượng thực phẩm của Ngân hàng thực đơn cân bằng dinh dưỡng.
           </Text>
         </>
-      )
+      ),
     },
     {
       question: "Nhu cầu năng lượng dành cho phụ nữ mang thai, bà mẹ cho con bú mức hoạt động thể lực nhẹ là như thế nào?",

@@ -16,6 +16,7 @@ import ListDoctorPage from '@/pages/ListDoctorPage';
 import MyRequestPage from '@/pages/MyRequestPage';
 import FAQ from '@/pages/FAQ';
 import AboutUs from '@/pages/AboutUs';
+import BlogPage from '@/pages/BlogPage';
 const routes = [
   {
     layout: MainLayout,
@@ -102,6 +103,12 @@ const routes = [
         path: '/about',
         component: AboutUs,
         title: 'About',
+      },
+      {
+        path: '/blog',
+        component: BlogPage,
+        title: 'Blogs',
+        shouldLogin: false,
       },
     ],
   },
