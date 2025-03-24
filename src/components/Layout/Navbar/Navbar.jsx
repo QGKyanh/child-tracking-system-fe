@@ -71,9 +71,9 @@ const Navbar = () => {
                 href: '/faqs',
               },
               {
-                label: 'User Guide',
-                subLabel: 'How to use the platform',
-                href: '/user-guide',
+                label: 'About Us',
+                subLabel: 'Information about our platform',
+                href: '/about',
               },
             ],
           },
