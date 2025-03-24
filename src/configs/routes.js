@@ -14,6 +14,8 @@ import ConsultationPage from '@/pages/ConsultationPage';
 import ConsultationChatPage from '@/pages/ConsultationChatPage';
 import ListDoctorPage from '@/pages/ListDoctorPage';
 import MyRequestPage from '@/pages/MyRequestPage';
+import FAQ from '@/pages/FAQ';
+import AboutUs from '@/pages/AboutUs';
 const routes = [
   {
     layout: MainLayout,
@@ -90,6 +92,16 @@ const routes = [
         component: MyRequestPage,
         title: 'My Requests',
         shouldLogin: true,
+      },
+      {
+        path: '/faqs',
+        component: FAQ,
+        title: 'FAQ',
+      },
+      {
+        path: '/about',
+        component: AboutUs,
+        title: 'About',
       },
     ],
   },
