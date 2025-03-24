@@ -42,6 +42,14 @@ const authApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Auth'],
     }),
+    changePassword: build.mutation({
+      query: data => ({
+        url: '/auth/change-password',
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: ['Auth'],
+    }),
   }),
 });
 
@@ -51,4 +59,5 @@ export const {
   useGetUserInfoQuery,
   useLoginWithGoogleMutation,
   useLogoutMutation,
+  useChangePasswordMutation,
 } = authApi;

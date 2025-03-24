@@ -7,6 +7,7 @@ import HomePage from '@/pages/HomePage';
 import LoginPage from '@/pages/LoginPage';
 import MembershipPage from '@/pages/MembershipPage';
 import GrowthChartPage from '@/pages/GrowthChartPage';
+import ProfilePage from '@/pages/ProfilePage';
 
 const routes = [
   {
@@ -22,6 +23,12 @@ const routes = [
         path: '/plans',
         component: MembershipPage,
         title: 'Membership',
+      },
+      {
+        path: '/profile',
+        component: ProfilePage,
+        title: 'Profile',
+        shouldLogin: true,
       },
       {
         path: '/children',
