@@ -26,7 +26,7 @@ const routes = [
         component: DoctorRequestPage,
         title: 'Doctor Requests',
         shouldLogin: true,
-        role: 2
+        role: 2,
       },
       // {
       //   path: '/doctor/consultations',
@@ -45,28 +45,28 @@ const routes = [
         component: ChildPage,
         title: 'Child Management',
         shouldLogin: true,
-        role: 1
+        role: 1,
       },
       {
         path: '/children/:childId',
         component: ChildDetail,
         title: 'Child Detail',
         shouldLogin: true,
-        role: 1
+        role: 1,
       },
       {
         path: '/growth-charts',
         component: GrowthChartPage,
         title: 'Growth Charts',
         shouldLogin: true,
-        role: 1
+        role: 1,
       },
       {
         path: '/growth-charts/:childId',
         component: GrowthChartPage,
         title: 'Growth Charts',
         shouldLogin: true,
-        role: 1
+        role: 1,
       },
       {
         path: '/consultations',
@@ -75,10 +75,9 @@ const routes = [
       },
       {
         path: '/consultation-chat/:consultationId',
-        component: ConsultationChatPage, 
+        component: ConsultationChatPage,
         title: 'Consultation Chat Detail',
       },
-      
     ],
   },
   {
