@@ -169,15 +169,24 @@ import {
       </Text>
     )}
 
-    <Button
-      size="sm"
-      colorScheme="teal"
-      variant="outline"
-      mt={2}
-      onClick={() => navigate(`/consultation-chat/${item._id}`, { state: { index: index + 1 } })}
-    >
-      Message
-    </Button>
+<Button
+  size="sm"
+  colorScheme="teal"
+  variant="outline"
+  mt={2}
+  onClick={() => {
+    navigate(`/consultation-chat/${item._id}`, {
+      state: {
+        index: index + 1,
+        page: 1,   
+        size: 100, 
+      },
+    });
+  }}
+>
+  Message
+</Button>
+
   </Box>
 
   <VStack align="flex-end" spacing={2}>

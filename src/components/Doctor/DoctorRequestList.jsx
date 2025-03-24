@@ -35,7 +35,7 @@ const DoctorRequestList = ({ requests, onView, onUpdateStatus }) => {
       <VStack spacing={4} align="stretch">
         {displayedRequests.map((request) => {
           const isPending = request.status === "Pending";
-          const childId = request.childIds?.[0]; // Lấy ID đứa trẻ từ request
+          const childIds = request.childIds || []; // Lấy danh sách ID của các trẻ em
 
           return (
             <Box
@@ -78,16 +78,22 @@ const DoctorRequestList = ({ requests, onView, onUpdateStatus }) => {
 
               {/* Bottom Actions */}
               <Flex justify="space-between" align="center" mt={3}>
-                {/* 👇 Bottom left - View child */}
-                <Button
-                  size="sm"
-                  variant="outline"
-                  colorScheme="gray"
-                  onClick={() => navigate(`/children/${request.childIds?.[0]}`)}
-                  isDisabled={!childId}
-                >
-                  View Child
-                </Button>
+                {/* 👇 Dynamic "View Child" Buttons */}
+                {childIds.length >= 1 && (
+                  <HStack spacing={3}>
+                    {childIds.map((childId, index) => (
+                      <Button
+                        key={index}
+                        size="sm"
+                        variant="outline"
+                        colorScheme="gray"
+                        onClick={() => navigate(`/children/${childId}`)}
+                      >
+                        View Child {index + 1}
+                      </Button>
+                    ))}
+                  </HStack>
+                )}
 
                 {/* 👇 Bottom right - Actions */}
                 <HStack spacing={2}>
@@ -139,6 +145,3 @@ const DoctorRequestList = ({ requests, onView, onUpdateStatus }) => {
 };
 
 export default DoctorRequestList;
-
-
-
