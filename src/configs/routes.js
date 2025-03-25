@@ -16,6 +16,9 @@ import ListDoctorPage from '@/pages/ListDoctorPage';
 import MyRequestPage from '@/pages/MyRequestPage';
 import FAQ from '@/pages/FAQ';
 import AboutUs from '@/pages/AboutUs';
+import BlogPage from '@/pages/BlogPage';
+import BlogDetail from '@/pages/BlogDetail';
+import SignUpPage from '@/pages/SignUpPage';
 const routes = [
   {
     layout: MainLayout,
@@ -103,6 +106,18 @@ const routes = [
         component: AboutUs,
         title: 'About',
       },
+      {
+        path: '/blog',
+        component: BlogPage,
+        title: 'Blogs',
+        shouldLogin: false,
+      },
+      {
+        path: '/blog/:blogId',
+        component: BlogDetail,
+        title: 'Blog',
+        shouldLogin: false,
+      },
     ],
   },
   {
@@ -122,6 +137,11 @@ const routes = [
         path: 'auth/google/callback',
         component: GoogleCallback,
         title: 'Google Authentication',
+      },
+      {
+        path: '/register',
+        component: SignUpPage,
+        title: 'Sign Up',
       },
     ],
   },

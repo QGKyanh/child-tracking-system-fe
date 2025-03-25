@@ -107,6 +107,7 @@ const MembershipPage = () => {
               onNext={handleNextPage}
               onPrev={handlePrevPage}
               onCheckout={openCheckoutModal}
+              type='ALL'
             />
           </Box>
         )}
