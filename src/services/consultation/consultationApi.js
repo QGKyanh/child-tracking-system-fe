@@ -1,12 +1,13 @@
-import apiSlice from '@/api/apiSlice';
+import { apiSlice } from '@/api/apiSlice';
 
 const consultationApi = apiSlice.injectEndpoints({
   endpoints: build => ({
     // Updates the status of a consultation. Only members and admins can perform this action.
     updateConsultationStatus: build.mutation({
-      query: id => ({
+      query: ({ id, status }) => ({
         url: `/consultations/status/${id}`,
         method: 'PUT',
+        body: { status },
       }),
       invalidatesTags: ['Consultations'],
     }),
