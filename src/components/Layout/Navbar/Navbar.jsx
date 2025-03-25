@@ -16,19 +16,58 @@ import {
   MenuList,
   MenuItem,
   Avatar,
+  useToast,
 } from '@chakra-ui/react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { HamburgerIcon, CloseIcon, ChevronDownIcon } from '@chakra-ui/icons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   selectIsAuthenticated,
   selectCurrentUser,
+  logout,
 } from '@/services/auth/authSlice';
+import { useLogoutMutation } from '@/services/auth/authApi';
 
 const Navbar = () => {
   const { isOpen, onToggle } = useDisclosure();
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const user = useSelector(selectCurrentUser);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const toast = useToast();
+
+  const [logoutMutation, { isLoading: isLoggingOut }] = useLogoutMutation();
+
+  const handleLogout = async () => {
+    try {
+      // Call the logout API
+      const result = await logoutMutation().unwrap();
+      console.log('Logout API response:', result);
+
+      // Update the Redux state
+      dispatch(logout());
+
+      // Show success toast
+      toast({
+        title: 'Logout successful',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+
+      // Force a hard refresh to fully clear the state
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Logout error:', error);
+      toast({
+        title: 'Logout failed',
+        description: error?.data?.message || 'An error occurred during logout',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
 
   const userRole = user?.role;
 
@@ -183,9 +222,7 @@ const Navbar = () => {
                   <MenuItem as={RouterLink} to='/settings'>
                     Settings
                   </MenuItem>
-                  <MenuItem as={RouterLink} to='/logout'>
-                    Logout
-                  </MenuItem>
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
                 </MenuList>
               </Menu>
             ) : (
