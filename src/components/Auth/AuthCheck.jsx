@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const AuthCheck = ({ children, shouldLogin, shouldLogout, requiredRole }) => {
   const nav = useNavigate();
   const authState = useSelector(state => state.authSlice);
-  const userRole = authState?.user?.role;
+  const userRole = authState?.user?.role ?? 0;
 
   useEffect(() => {
     // Check for authentication
@@ -22,7 +22,7 @@ const AuthCheck = ({ children, shouldLogin, shouldLogout, requiredRole }) => {
     if (
       authState.isAuthenticated &&
       requiredRole !== undefined &&
-      userRole !== requiredRole
+      !requiredRole.includes(userRole)
     ) {
       return nav('/no-permission');
     }
