@@ -6,11 +6,17 @@ const DoctorRequestList = ({ requests, totalPages, currentPage, setPage, onView,
   const [statusFilter, setStatusFilter] = useState("");  // State for status filter
   const navigate = useNavigate();
 
-  // Filter by status
-  const filteredRequests = Array.isArray(requests) ? requests.filter((request) => {
-    if (!statusFilter) return true;  // No filter if statusFilter is empty
-    return request.status.toLowerCase() === statusFilter.toLowerCase();
-  }) : [];
+// Sort by newest createdAt first and then filter by status
+const filteredRequests = Array.isArray(requests)
+  ? requests
+      .slice() // avoid mutating original array
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // sort mới nhất
+      .filter((request) => {
+        if (!statusFilter) return true;
+        return request.status.toLowerCase() === statusFilter.toLowerCase();
+      })
+  : [];
+
 
   // Handle page change
   const handlePageChange = (page) => {

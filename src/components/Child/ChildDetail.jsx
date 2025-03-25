@@ -132,7 +132,6 @@ const ChildDetail = ({ isOpen, onClose, childId, onEdit }) => {
     }
   };
 
-<<<<<<< HEAD
   if (isLoading) {
     return (
       <Center py={10}>
@@ -152,8 +151,6 @@ const ChildDetail = ({ isOpen, onClose, childId, onEdit }) => {
     );
   }
 console.log("child",child);
-=======
->>>>>>> 247b6f8dd90434cfe50cbed3f0d2643adcf1b853
   return (
     <Modal isOpen={isOpen} onClose={onClose} size='lg'>
       <ModalOverlay />
