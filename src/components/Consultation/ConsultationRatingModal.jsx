@@ -164,7 +164,7 @@ const ConsultationRatingModal = ({ isOpen, onClose, consultationId }) => {
                 </Box>
               </Box>
 
-              <Box>
+              {/* <Box>
                 <Text mb={2} fontWeight='medium'>
                   Additional feedback (optional)
                 </Text>
@@ -179,7 +179,7 @@ const ConsultationRatingModal = ({ isOpen, onClose, consultationId }) => {
                 <Text fontSize='xs' textAlign='right' color='gray.500' mt={1}>
                   {feedback.length}/500 characters
                 </Text>
-              </Box>
+              </Box> */}
             </VStack>
           )}
         </ModalBody>
