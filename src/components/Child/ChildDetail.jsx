@@ -132,6 +132,25 @@ const ChildDetail = ({ isOpen, onClose, childId, onEdit }) => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <Center py={10}>
+        <Spinner size='xl' color='blue.500' />
+      </Center>
+    );
+  }
+
+  if (isError || !child) {
+    return (
+      <Center py={10}>
+        <Alert status='error'>
+          <AlertIcon />
+          {error?.data?.message || 'Failed to load child data'}
+        </Alert>
+      </Center>
+    );
+  }
+  console.log('child', child);
   return (
     <Modal isOpen={isOpen} onClose={onClose} size='lg'>
       <ModalOverlay />

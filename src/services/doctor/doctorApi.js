@@ -7,7 +7,7 @@ const doctorApi = apiSlice.injectEndpoints({
       query: ({
         doctorId,
         page = 1,
-        size = 10,
+        size = 10, // Đảm bảo mỗi trang có 10 yêu cầu
         order = 'ascending',
         sortBy = 'date',
         as = 'DOCTOR',
@@ -15,16 +15,23 @@ const doctorApi = apiSlice.injectEndpoints({
         url: `/requests/users/${doctorId}`,
         method: 'GET',
         params: new URLSearchParams({
-          page,
-          size,
+          page,    // Truyền số trang cần lấy
+          size,    // Số lượng yêu cầu mỗi trang
           order,
           sortBy,
           as,
         }).toString(),
       }),
-      transformResponse: res => res?.requests?.requests || [],
+      transformResponse: res => {
+        // Dữ liệu từ backend có thể trả về là { requests: { requests: [...] }, totalPages: X }
+        return {
+          requests: res?.requests?.requests || [],
+          totalPages: res?.totalPages || 1,  // Đảm bảo lấy đúng số trang tổng cộng
+        };
+      },
       providesTags: ['Request'],
     }),
+    
 
     // 🟢 Cập nhật trạng thái request
     updateRequestStatus: build.mutation({

@@ -94,7 +94,6 @@ const routes = [
         component: ConsultationChatPage,
         title: 'Consultation Chat Detail',
         shouldLogin: true,
-        role: 0,
       },
       {
         path: '/contact',

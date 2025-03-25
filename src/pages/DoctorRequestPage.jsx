@@ -34,7 +34,7 @@ import { useGetDoctorRequestsQuery, useUpdateRequestStatusMutation } from '@/ser
 const DoctorRequestPage = () => {
   const { data: userInfo, isLoading: isUserLoading, isError: isUserError } = useGetUserInfoQuery();
   const [doctorId, setDoctorId] = useState(null);
-
+  const [currentPage, setCurrentPage] = useState(1);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [confirmData, setConfirmData] = useState({ requestId: null, status: "" });
   const [isLoading, setIsLoading] = useState(false); // Track loading state
@@ -48,10 +48,10 @@ const DoctorRequestPage = () => {
     }
   }, [userInfo]);
 
-  const { data: requests, isLoading: isRequestsLoading, isError, error, refetch } =
-    useGetDoctorRequestsQuery({ doctorId }, { skip: !doctorId });
-
-  console.log("Doctor ID:", doctorId); 
+  const { data: requestsData, isLoading: isRequestsLoading, isError, error, refetch } =
+    useGetDoctorRequestsQuery({ doctorId, page: currentPage, size: 15 }, { skip: !doctorId });
+    const { requests, totalPages } = requestsData || { requests: [], totalPages: 1 };
+  // console.log("Doctor ID:", doctorId); 
   console.log("Danh sách requests:", requests);
 
   const [selectedRequestId, setSelectedRequestId] = useState(null);
@@ -67,14 +67,13 @@ const DoctorRequestPage = () => {
     if (request) {
       setSelectedRequestId(requestId);
   
-      // Ensure there's at least one child ID before setting
+      // Handle multiple children: show the first child initially
       if (request.childIds && request.childIds.length > 0) {
         setSelectedChildId(request.childIds[0]); // Assign first childId
       } else {
-        console.warn("No childId found for request:", requestId);
         setSelectedChildId(null);
       }
-      
+  
       detailModal.onOpen();
     } else {
       console.error("Request not found for ID:", requestId);
@@ -207,10 +206,13 @@ const DoctorRequestPage = () => {
           </Center>
         ) : (
           <DoctorRequestList
-            requests={requests}
-            onView={handleViewRequest}
-            onUpdateStatus={handleUpdateStatus}
-          />
+          requests={requests}
+          totalPages={totalPages}
+          currentPage={currentPage}
+          setPage={setCurrentPage}
+          onView={handleViewRequest}
+          onUpdateStatus={handleUpdateStatus}
+        />
         )}
 
         {/* Modals */}

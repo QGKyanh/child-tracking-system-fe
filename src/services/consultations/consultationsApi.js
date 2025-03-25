@@ -4,7 +4,7 @@ import { apiSlice } from '@/api/apiSlice';
 export const consultationApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getConsultationsByUserId: builder.query({
-      query: ({ userId, page = 1, size = 10, search = '', order = 'ascending', sortBy = '', status = '', as = 'DOCTOR' }) => {
+      query: ({ userId, page = 1, size = 10, search = '', order = 'ascending', sortBy = 'date', status = '', as = 'DOCTOR' }) => {
         const params = new URLSearchParams();
 
         if (page) params.append('page', page);
