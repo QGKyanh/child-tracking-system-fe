@@ -2,7 +2,15 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { login, setUser } from '@/services/auth/authSlice';
-import { Box, Center, Spinner, Text, useToast } from '@chakra-ui/react';
+import {
+  Box,
+  Center,
+  Spinner,
+  Text,
+  useToast,
+  Alert,
+  AlertIcon,
+} from '@chakra-ui/react';
 import { useGetUserInfoQuery } from '@/services/auth/authApi';
 
 const GoogleCallback = () => {
@@ -11,21 +19,23 @@ const GoogleCallback = () => {
   const [searchParams] = useSearchParams();
   const toast = useToast();
 
-  // Get token from URL query parameters
-  const token = searchParams.get('token');
+  // Check if there's an error in the URL
   const error = searchParams.get('error');
 
-  // Fetch user info once we have the token
+  // Directly fetch user info since we now have cookies from the Google auth redirect
   const {
     data: userData,
-    isLoading,
-    error: userError,
-  } = useGetUserInfoQuery(undefined, {
-    skip: !token,
-  });
+    isLoading: isLoadingUserData,
+    isError,
+    error: userInfoError,
+  } = useGetUserInfoQuery();
 
   useEffect(() => {
+    console.log('Google callback mounted, checking cookies...');
+
+    // Handle error from URL parameter
     if (error) {
+      console.error('Google auth error:', error);
       toast({
         title: 'Google Login Failed',
         description: error,
@@ -38,35 +48,70 @@ const GoogleCallback = () => {
       return;
     }
 
-    if (token) {
-      // Store the token in Redux
-      dispatch(login({ accessToken: token }));
-
-      // If we have user data, store it too
-      if (userData && !isLoading && !userError) {
-        dispatch(setUser(userData));
-        toast({
-          title: 'Login Successful',
-          description: `Welcome ${userData.name}!`,
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-          position: 'top-right',
-        });
-        navigate('/');
-      }
-    } else if (!isLoading) {
-      // If no token and not loading, redirect to login
+    // Handle user data loading error
+    if (isError) {
+      console.error('User data error:', userInfoError);
+      toast({
+        title: 'Login Failed',
+        description:
+          userInfoError?.data?.message || 'Could not retrieve user information',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top-right',
+      });
       navigate('/login');
+      return;
     }
-  }, [token, error, userData, isLoading, userError, dispatch, navigate, toast]);
+
+    // If we have user data, we're logged in successfully
+    if (userData && !isLoadingUserData) {
+      console.log('User data received:', userData);
+
+      // Tell Redux we're authenticated
+      dispatch(login({ accessToken: 'cookie-based-auth' }));
+      dispatch(setUser(userData));
+
+      toast({
+        title: 'Login Successful',
+        description: `Welcome ${userData.name || ''}!`,
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+
+      navigate('/');
+    }
+  }, [
+    userData,
+    isLoadingUserData,
+    isError,
+    userInfoError,
+    error,
+    dispatch,
+    navigate,
+    toast,
+  ]);
 
   return (
-    <Center h='100vh'>
-      <Box textAlign='center'>
-        <Spinner size='xl' color='blue.500' mb={4} />
-        <Text>Logging you in with Google...</Text>
-      </Box>
+    <Center h='100vh' flexDirection='column'>
+      {error ? (
+        <Alert status='error' variant='solid' maxW='md'>
+          <AlertIcon />
+          Authentication failed: {error}
+        </Alert>
+      ) : (
+        <Box textAlign='center'>
+          <Spinner size='xl' color='blue.500' mb={4} thickness='4px' />
+          <Text fontSize='lg' fontWeight='medium'>
+            Logging you in with Google...
+          </Text>
+          <Text color='gray.500' mt={2}>
+            Please wait while we complete the authentication process.
+          </Text>
+        </Box>
+      )}
     </Center>
   );
 };

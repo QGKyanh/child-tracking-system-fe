@@ -1,23 +1,50 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGetUserInfoQuery } from '@/services/auth/authApi';
-import { selectAccessToken, setUser } from '@/services/auth/authSlice';
+import {
+  login,
+  setUser,
+  selectIsAuthenticated,
+} from '@/services/auth/authSlice';
+import { Box, Center, Spinner } from '@chakra-ui/react';
 
 const AuthProvider = ({ children }) => {
   const dispatch = useDispatch();
-  const accessToken = useSelector(selectAccessToken);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const [initialCheckCompleted, setInitialCheckCompleted] = useState(false);
 
-  // Only fetch user data if we have an access token
-  const { data: userData, isLoading } = useGetUserInfoQuery(undefined, {
-    skip: !accessToken, // Skip this query if no token is available
-  });
+  // Always try to get user info on app start - this will check if there are valid cookies
+  const {
+    data: userData,
+    isLoading,
+    isSuccess,
+    isError,
+  } = useGetUserInfoQuery();
 
   // Update Redux store when user data is fetched
   useEffect(() => {
-    if (userData && !isLoading) {
+    // Once we've attempted to fetch user data, mark initial check as complete
+    if (!isLoading) {
+      setInitialCheckCompleted(true);
+    }
+
+    if (userData && isSuccess) {
+      // If we got user data successfully, update Redux state
+      if (!isAuthenticated) {
+        dispatch(login({ accessToken: 'cookie-based-auth' }));
+      }
       dispatch(setUser(userData));
     }
-  }, [userData, isLoading, dispatch]);
+  }, [userData, isLoading, isSuccess, isAuthenticated, dispatch]);
+
+  // Show loading state only during initial auth check
+  if (!initialCheckCompleted) {
+    return (
+      <Center height='100vh'>
+        <Spinner size='xl' color='blue.500' />
+      </Center>
+    );
+  }
 
   return children;
 };
