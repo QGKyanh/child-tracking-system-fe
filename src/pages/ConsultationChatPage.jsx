@@ -259,13 +259,13 @@ const ConsultationChatPage = () => {
       </HStack>
 
       {/* Debug information - remove in production */}
-      {process.env.NODE_ENV !== 'production' && (
+      {/* {process.env.NODE_ENV !== 'production' && (
         <Box p={2} bg='yellow.100' mb={2} borderRadius='md'>
           <Text fontSize='xs'>ConsultationID: {consultationId}</Text>
           <Text fontSize='xs'>Messages Count: {messagesState.length}</Text>
           <Text fontSize='xs'>Loading: {isLoading ? 'Yes' : 'No'}</Text>
         </Box>
-      )}
+      )} */}
 
       {/* Message Display Area */}
       <VStack
