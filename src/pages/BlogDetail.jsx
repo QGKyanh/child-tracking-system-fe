@@ -36,6 +36,8 @@ import CommentList from '@/components/Comments/CommentList';
 import { useGetUserInfoQuery } from '@/services/auth/authApi';
 import { useDeleteCommentMutation } from '@/services/comments/commentApi';
 
+import { useSelector } from 'react-redux';
+import {selectCurrentUser,} from '@/services/auth/authSlice';
 export default function BlogDetail() {
   const { blogId } = useParams();
   const navigate = useNavigate();
@@ -46,13 +48,16 @@ export default function BlogDetail() {
   const { data: userInfo } = useGetUserInfoQuery();
   const [deleteComment] = useDeleteCommentMutation();
 
+  const user = useSelector(selectCurrentUser);
+  const userRole = user?.role;
+
   const handleImageClick = imgUrl => {
     setSelectedImage(imgUrl);
     onOpen();
   };
 
   const isAuthor =
-    userInfo?.id?.toString() === data?.post?.user?.id?.toString();
+    userInfo?._id?.toString() === data?.post?.user?._id?.toString();
 
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this blog post?')) {
