@@ -72,7 +72,7 @@ const ChildDetail = () => {
       </Center>
     );
   }
-
+console.log("child",child);
   return (
     <Box maxW='3xl' mx='auto' p={6}>
       <Flex justify='space-between' align='center' mb={6}>

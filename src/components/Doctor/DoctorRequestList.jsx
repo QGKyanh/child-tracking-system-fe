@@ -1,122 +1,95 @@
-import { useState } from "react";
-import {
-  Box,
-  VStack,
-  HStack,
-  Avatar,
-  Text,
-  Button,
-  Badge,
-  Divider,
-  Flex,
-  Stack,
-} from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { Box, VStack, HStack, Avatar, Text, Button, Badge, Divider, Flex, Select } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
-const DoctorRequestList = ({ requests, onView, onUpdateStatus }) => {
-  const itemsPerPage = 4;
-  const [currentPage, setCurrentPage] = useState(1);
-  const navigate = useNavigate(); // ✅ Khởi tạo navigate
+const DoctorRequestList = ({ requests, totalPages, currentPage, setPage, onView, onUpdateStatus }) => {
+  const [statusFilter, setStatusFilter] = useState("");  // State for status filter
+  const navigate = useNavigate();
 
-  const totalPages = Math.ceil(requests.length / itemsPerPage);
-  const displayedRequests = requests.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  // Filter by status
+  const filteredRequests = Array.isArray(requests) ? requests.filter((request) => {
+    if (!statusFilter) return true;  // No filter if statusFilter is empty
+    return request.status.toLowerCase() === statusFilter.toLowerCase();
+  }) : [];
 
+  // Handle page change
   const handlePageChange = (page) => {
-    setCurrentPage(page);
+    setPage(Number(page));
   };
 
-  if (!requests.length) return <Text>No requests available.</Text>;
+  // Handle status filter change
+  const handleStatusChange = (e) => {
+    setStatusFilter(e.target.value);
+  };
+
+  if (!requests?.length) return <Text>No requests available.</Text>;
 
   return (
     <Box>
-      <VStack spacing={4} align="stretch">
-        {displayedRequests.map((request) => {
-          const isPending = request.status === "Pending";
-          const childIds = request.childIds || []; // Lấy danh sách ID của các trẻ em
+      {/* Status Filter */}
+      <HStack mb={4}>
+        <Select value={statusFilter} onChange={handleStatusChange} placeholder="Filter by Status" size="sm" width="200px">
+          <option value="Accepted">Accepted</option>
+          <option value="Pending">Pending</option>
+          <option value="AdminApprove">AdminApprove</option>
+          <option value="Rejected">Rejected</option>
+        </Select>
+      </HStack>
 
+      <VStack spacing={4} align="stretch">
+        {filteredRequests.map((request) => {
+          const isPending = request.status === "Pending";
+          const childIds = request.childIds || [];
+console.log("filteredRequests:",filteredRequests);
           return (
-            <Box
-              key={request._id}
-              p={4}
-              borderWidth={1}
-              borderRadius="lg"
-              boxShadow="lg"
-              transition="all 0.3s"
-              _hover={{ boxShadow: "xl", transform: "scale(1.02)" }}
-            >
+            <Box key={request._id} p={4} borderWidth={1} borderRadius="lg" boxShadow="lg" transition="all 0.3s" _hover={{ boxShadow: "xl", transform: "scale(1.02)" }}>
               {/* Top Section */}
               <Flex justify="space-between" align="flex-start" mb={2}>
                 <HStack spacing={4}>
                   <Avatar src={request.member.avatar || "/default-avatar.png"} />
                   <Box>
                     <Text fontWeight="bold">{request.member.name}</Text>
-                    <Text fontSize="sm" color="gray.500">
-                      {new Date(request.createdAt).toLocaleDateString()}
-                    </Text>
+                    <Text fontSize="sm" color="gray.500">{new Date(request.createdAt).toLocaleDateString()}</Text>
                   </Box>
                 </HStack>
-                <Badge
-                  colorScheme={
-                    request.status === "Accepted"
-                      ? "green"
-                      : request.status === "Rejected"
-                      ? "red"
-                      : "yellow"
-                  }
-                >
+                <Badge colorScheme={request.status === "Accepted" ? "green" : request.status === "Rejected" ? "red" : "yellow"}>
                   {request.status}
                 </Badge>
               </Flex>
 
               {/* Message */}
               <Text mt={2} mb={3}>{request.title}</Text>
-
               <Divider />
 
               {/* Bottom Actions */}
               <Flex justify="space-between" align="center" mt={3}>
-                {/* 👇 Dynamic "View Child" Buttons */}
-                {childIds.length >= 1 && (
-                  <HStack spacing={3}>
-                    {childIds.map((childId, index) => (
-                      <Button
-                        key={index}
-                        size="sm"
-                        variant="outline"
-                        colorScheme="gray"
-                        onClick={() => navigate(`/children/${childId}`)}
-                      >
-                        View Child {index + 1}
-                      </Button>
-                    ))}
-                  </HStack>
-                )}
+              {childIds?.length >= 1 && (
+  <HStack spacing={3}>
+    {childIds.map((childId, index) => {
+      const child = request.children?.find(c => c._id === childId);  // Find child by ID
+      return (
+        <Button
+          key={index}
+          size="sm"
+          variant="outline"
+          colorScheme="gray"
+          onClick={() => navigate(`/children/${childId}`)}
+        >
+          View: {child?.name || `Child ${index + 1}`}
+        </Button>
+      );
+    })}
+  </HStack>
+)}
 
-                {/* 👇 Bottom right - Actions */}
+
                 <HStack spacing={2}>
-                  <Button colorScheme="blue" size="sm" onClick={() => onView(request._id)}>
-                    View Details
-                  </Button>
+                  <Button colorScheme="blue" size="sm" onClick={() => onView(request._id)}>View Details</Button>
 
                   {isPending && (
                     <>
-                      <Button
-                        colorScheme="green"
-                        size="sm"
-                        onClick={() => onUpdateStatus(request._id, "Accepted")}
-                      >
-                        Accept
-                      </Button>
-                      <Button
-                        colorScheme="red"
-                        size="sm"
-                        onClick={() => onUpdateStatus(request._id, "Rejected")}
-                      >
-                        Reject
-                      </Button>
+                      <Button colorScheme="green" size="sm" onClick={() => onUpdateStatus(request._id, "Accepted")}>Accept</Button>
+                      <Button colorScheme="red" size="sm" onClick={() => onUpdateStatus(request._id, "Rejected")}>Reject</Button>
                     </>
                   )}
                 </HStack>
@@ -129,13 +102,7 @@ const DoctorRequestList = ({ requests, onView, onUpdateStatus }) => {
       {/* Pagination */}
       <HStack justify="center" mt={6} wrap="wrap">
         {Array.from({ length: totalPages }, (_, index) => (
-          <Button
-            key={index}
-            size="sm"
-            variant={currentPage === index + 1 ? "solid" : "outline"}
-            colorScheme="blue"
-            onClick={() => handlePageChange(index + 1)}
-          >
+          <Button key={index} size="sm" variant={currentPage === index + 1 ? "solid" : "outline"} colorScheme="blue" onClick={() => handlePageChange(index + 1)}>
             {index + 1}
           </Button>
         ))}
