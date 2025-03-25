@@ -308,7 +308,7 @@ const ProfileDetails = ({ user }) => {
             </VStack>
           </Box>
         </VStack>
-        {storeUser?.role === 1 &&
+        {storeUser?.role === 0 && (
           <VStack spacing={6} align='stretch'>
             {/* Subscription Box */}
             <Box
@@ -358,7 +358,10 @@ const ProfileDetails = ({ user }) => {
                           Duration
                         </Text>
                         <Text fontWeight='medium'>
-                          {user.subscription.currentPlanDetails?.duration?.value}{' '}
+                          {
+                            user.subscription.currentPlanDetails?.duration
+                              ?.value
+                          }{' '}
                           {user.subscription.currentPlanDetails?.duration?.unit?.toLowerCase()}
                         </Text>
                       </Box>
@@ -447,7 +450,11 @@ const ProfileDetails = ({ user }) => {
                           {user.subscription.futurePlanDetails?.description}
                         </Text>
 
-                        <Box mt={3} display='flex' justifyContent='space-between'>
+                        <Box
+                          mt={3}
+                          display='flex'
+                          justifyContent='space-between'
+                        >
                           <Box>
                             <Text fontSize='sm' color='gray.500'>
                               Price
@@ -457,7 +464,8 @@ const ProfileDetails = ({ user }) => {
                                 style: 'currency',
                                 currency: 'VND',
                               }).format(
-                                user.subscription.futurePlanDetails?.price?.value
+                                user.subscription.futurePlanDetails?.price
+                                  ?.value
                               )}
                             </Text>
                           </Box>
@@ -523,7 +531,7 @@ const ProfileDetails = ({ user }) => {
               )}
             </Box>
           </VStack>
-        }
+        )}
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
@@ -574,9 +582,9 @@ const ProfileDetails = ({ user }) => {
           </ModalContent>
         </Modal>
       </SimpleGrid>
-      {storeUser?.role === 1 &&
+      {storeUser?.role === 1 && (
         <ReceiptList userId={user?._id} toast={toast} />
-      }
+      )}
     </Box>
   );
 };
