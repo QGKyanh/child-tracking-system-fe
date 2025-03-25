@@ -572,14 +572,7 @@ console.log("con la:",consultations);
                     )}
                   </VStack>
 
-                  <Button
-                    size="sm"
-                    colorScheme="red"
-                    variant="ghost"
-                    onClick={() => handleDeleteGrowthData(measurement._id)}
-                  >
-                    Delete
-                  </Button>
+              
                 </Flex>
               </Box>
             ))}
