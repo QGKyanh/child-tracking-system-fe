@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const AuthCheck = ({
   children,
@@ -10,6 +10,7 @@ const AuthCheck = ({
   blockAdmin = true,
 }) => {
   const nav = useNavigate();
+  const location = useLocation();
   const authState = useSelector(state => state.authSlice);
   const userRole = authState?.user?.role ?? 0;
 
@@ -19,7 +20,9 @@ const AuthCheck = ({
   useEffect(() => {
     // Check for authentication
     if (!authState.isAuthenticated && shouldLogin) {
-      return nav('/login?need_login=true');
+      return nav(
+        `/login?need_login=true&redirect=${encodeURIComponent(location.pathname)}`
+      );
     }
 
     // Check for logout condition
@@ -48,6 +51,7 @@ const AuthCheck = ({
     requiredRole,
     userRole,
     blockAdmin,
+    location.pathname,
   ]);
 
   return children;

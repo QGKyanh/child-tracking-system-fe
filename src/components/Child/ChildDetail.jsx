@@ -150,7 +150,7 @@ const ChildDetail = ({ isOpen, onClose, childId, onEdit }) => {
       </Center>
     );
   }
-console.log("child",child);
+  console.log('child', child);
   return (
     <Modal isOpen={isOpen} onClose={onClose} size='lg'>
       <ModalOverlay />

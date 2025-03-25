@@ -14,7 +14,7 @@ import {
 import { useGetCommentsByPostQuery } from '@/services/comments/commentApi';
 import { format } from 'date-fns';
 
-const CommentList = ({ postId }) => {
+const CommentList = ({ postId, userId, deleteComment }) => {
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(5);
   const { data, error, isLoading } = useGetCommentsByPostQuery({
@@ -39,20 +39,31 @@ const CommentList = ({ postId }) => {
           {comments.length > 0 ? (
             comments.map((comment, index) => (
               <Box key={comment.id} p={4} bg='gray.50' borderRadius='md'>
-                <Flex align='center' mb={2}>
-                  <Avatar
-                    size='sm'
-                    src={comment.user.avatar}
-                    name={comment.user.name}
-                  />
-                  <Box ml={3}>
-                    <Text fontSize='md' fontWeight='bold'>
-                      {comment.user.name}
-                    </Text>
-                    <Text fontSize='sm' color='gray.500'>
-                      {format(new Date(comment.createdAt), 'PPP p')}
-                    </Text>
-                  </Box>
+                <Flex align='center' justify='space-between' mb={2}>
+                  <Flex align='center'>
+                    <Avatar
+                      size='sm'
+                      src={comment.user.avatar}
+                      name={comment.user.name}
+                    />
+                    <Box ml={3}>
+                      <Text fontSize='md' fontWeight='bold'>
+                        {comment.user.name}
+                      </Text>
+                      <Text fontSize='sm' color='gray.500'>
+                        {format(new Date(comment.createdAt), 'PPP p')}
+                      </Text>
+                    </Box>
+                  </Flex>
+                  {userId.toString() === comment.user._id.toString() && (
+                    <Button
+                      colorScheme='red'
+                      size='sm'
+                      onClick={() => deleteComment(comment._id)}
+                    >
+                      Delete
+                    </Button>
+                  )}
                 </Flex>
                 <Text fontSize='md' color='gray.700'>
                   {comment.content}
