@@ -57,13 +57,15 @@ const ConsultationPage = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [totalPages, setTotalPages] = useState(0);
+  const [statusFilter, setStatusFilter] = useState('All');
+
   const [updateConsultationStatus, { isLoading: isUpdating }] =
     useUpdateConsultationStatusMutation();
   const { data, isLoading, isError, error, refetch } =
     useGetConsultationsByUserIdQuery({
       userId: doctorId,
       page,
-      size: 8,
+      size: 10,
       order: 'descending',
       sortBy: 'date',
       as,
@@ -202,6 +204,25 @@ const ConsultationPage = () => {
           }}
         />
       </Box>
+      <Flex gap={4} mb={4} direction={{ base: 'column', md: 'row' }}>
+
+
+  <Box>
+    <select
+      value={statusFilter}
+      onChange={e => setStatusFilter(e.target.value)}
+      style={{
+        padding: '10px',
+        borderRadius: '6px',
+        border: '1px solid #ccc',
+      }}
+    >
+      <option value='All'>All</option>
+      <option value='Ongoing'>Ongoing</option>
+      <option value='Ended'>Ended</option>
+    </select>
+  </Box>
+</Flex>
 
       {isLoading ? (
         <Flex justify='center' align='center' h='60vh'>
@@ -210,21 +231,25 @@ const ConsultationPage = () => {
       ) : (
         <VStack spacing={4}>
           {consultations
-            .filter(item => {
-              const title = item?.requestDetails?.title?.toLowerCase() || '';
-              const parent =
-                item?.requestDetails?.member?.name?.toLowerCase() || '';
-              const child =
-                item?.requestDetails?.children?.[0]?.name?.toLowerCase() || '';
-              const term = searchTerm.toLowerCase();
-              const doctorName = item?.doctor?.name?.toLowerCase() || '';
-              return (
-                title.includes(term) ||
-                parent.includes(term) ||
-                child.includes(term) ||
-                doctorName.includes(term)
-              );
-            })
+       .filter(item => {
+        const title = item?.requestDetails?.title?.toLowerCase() || '';
+        const parent = item?.requestDetails?.member?.name?.toLowerCase() || '';
+        const child = item?.requestDetails?.children?.[0]?.name?.toLowerCase() || '';
+        const term = searchTerm.toLowerCase();
+        const doctorName = item?.doctor?.name?.toLowerCase() || '';
+      
+        const matchesSearch =
+          title.includes(term) ||
+          parent.includes(term) ||
+          child.includes(term) ||
+          doctorName.includes(term);
+      
+        const matchesStatus =
+          statusFilter === 'All' || item.status === statusFilter;
+      
+        return matchesSearch && matchesStatus;
+      })
+      
             .map((item, index) => (
               <Box
                 key={item._id}
