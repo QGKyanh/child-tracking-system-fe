@@ -8,6 +8,7 @@ import {
   Stack,
   Heading,
 } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 
 export default function MembershipList({
   memberships,
@@ -16,6 +17,7 @@ export default function MembershipList({
   onNext,
   onPrev,
   onCheckout,
+  type,
 }) {
   return (
     <Box>
@@ -115,22 +117,33 @@ export default function MembershipList({
       </Box>
 
       {/* Pagination controls */}
-      {totalPages > 1 && (
-        <Flex
-          justify='space-between'
-          marginLeft={10}
-          marginRight={10}
-          align='center'
-        >
-          <Button onClick={onPrev} isDisabled={currentPage === 1}>
-            Previous
-          </Button>
+      {type === 'ALL' && (
+        <>
+          {totalPages > 1 && (
+            <Flex
+              justify='space-between'
+              marginLeft={10}
+              marginRight={10}
+              align='center'
+            >
+              <Button onClick={onPrev} isDisabled={currentPage === 1}>
+                Previous
+              </Button>
 
-          <Button onClick={onNext} isDisabled={currentPage === totalPages}>
-            Next
-          </Button>
-        </Flex>
+              <Button onClick={onNext} isDisabled={currentPage === totalPages}>
+                Next
+              </Button>
+            </Flex>
+          )}
+        </>
       )}
+      <Flex justifyContent={'flex-end'}>
+        {type === 'HOME' && (
+          <Button as={Link} to={'/plans'} mr={5}>
+            More plans
+          </Button>
+        )}
+      </Flex>
     </Box>
   );
 }

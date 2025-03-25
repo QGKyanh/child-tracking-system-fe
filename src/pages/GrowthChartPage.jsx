@@ -11,10 +11,7 @@ import {
   Flex,
   Button,
   Select,
-  VStack,
-  HStack,
   Spinner,
-  Badge,
   Alert,
   AlertIcon,
   Grid,
@@ -29,31 +26,16 @@ import {
   useGetListChildrenQuery,
   useGetChildByIdQuery,
   useGetGrowthDataQuery,
-  useDeleteGrowthDataMutation,
 } from '@/services/child/childApi';
 import GrowthChart from '@/components/Child/ChildGrowth/GrowthChart';
 import PercentileDisplay from '@/components/Child/ChildGrowth/PercentileDisplay';
 import GrowthDataForm from '@/components/Child/ChildGrowth/GrowthDataForm';
+import RecentMeasurementCard from '@/components/Child/ChildGrowth/RecentMeasurementCard';
 
 const GrowthChartPage = () => {
   const { childId: urlChildId } = useParams();
   const navigate = useNavigate();
   const toast = useToast();
-
-  const formatDate = dateString => {
-    try {
-      if (!dateString) return 'No date';
-      const date = new Date(dateString);
-      // Check if date is valid
-      if (isNaN(date.getTime())) {
-        return 'Invalid date';
-      }
-      return format(date, 'PPP');
-    } catch (error) {
-      console.error('Error formatting date:', error, dateString);
-      return 'Invalid date';
-    }
-  };
 
   // State
   const [selectedChildId, setSelectedChildId] = useState(urlChildId || '');
@@ -74,11 +56,13 @@ const GrowthChartPage = () => {
       skip: !selectedChildId,
     }
   );
-  const { data: growthData, isLoading: isLoadingGrowth } =
-    useGetGrowthDataQuery(selectedChildId, {
-      skip: !selectedChildId,
-    });
-  const [deleteGrowthData] = useDeleteGrowthDataMutation();
+  const {
+    data: growthData,
+    isLoading: isLoadingGrowth,
+    refetch: refetchGrowthData,
+  } = useGetGrowthDataQuery(selectedChildId, {
+    skip: !selectedChildId,
+  });
 
   // Update URL when child selection changes
   useEffect(() => {
@@ -99,34 +83,6 @@ const GrowthChartPage = () => {
   // Handle child selection change
   const handleChildChange = e => {
     setSelectedChildId(e.target.value);
-  };
-
-  // Handle growth data deletion
-  const handleDeleteGrowthData = async growthDataId => {
-    if (!window.confirm('Are you sure you want to delete this measurement?'))
-      return;
-
-    try {
-      await deleteGrowthData({
-        childId: selectedChildId,
-        _id: growthDataId,
-      }).unwrap();
-
-      toast({
-        title: 'Measurement deleted',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
-    } catch (error) {
-      toast({
-        title: 'Error deleting measurement',
-        description: error.data?.message || 'Something went wrong',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-      });
-    }
   };
 
   // Get the latest growth data point
@@ -275,95 +231,13 @@ const GrowthChartPage = () => {
                 latestGrowthData={latestGrowthData}
               />
 
-              {/* Recent Measurements */}
-              <Box
-                mt={6}
-                p={4}
-                borderWidth='1px'
-                borderRadius='lg'
-                bg='white'
-                shadow='sm'
-              >
-                <Heading size='md' mb={4}>
-                  Recent Measurements
-                </Heading>
-
-                {growthData.growthData.slice(0, 5).map(measurement => (
-                  <Box
-                    key={measurement._id}
-                    p={3}
-                    mb={2}
-                    borderWidth='1px'
-                    borderRadius='md'
-                    _hover={{ bg: 'gray.50' }}
-                  >
-                    <Flex justify='space-between' align='center'>
-                      <VStack align='start' spacing={1}>
-                        <Badge>{formatDate(measurement.inputDate)}</Badge>
-                        <HStack spacing={4} mt={1}>
-                          <Text fontSize='sm'>
-                            Height: {measurement.height} cm
-                          </Text>
-                          <Text fontSize='sm'>
-                            Weight: {measurement.weight} kg
-                          </Text>
-                        </HStack>
-                        {measurement.headCircumference && (
-                          <Text fontSize='sm'>
-                            Head: {measurement.headCircumference} cm
-                          </Text>
-                        )}
-                        {/* Add indicator for growth status */}
-                        {measurement.growthResult && (
-                          <HStack mt={1}>
-                            {measurement.growthResult.weight && (
-                              <Badge
-                                colorScheme={
-                                  measurement.growthResult.weight.level ===
-                                  'High'
-                                    ? 'blue'
-                                    : measurement.growthResult.weight.level ===
-                                      'Low'
-                                    ? 'orange'
-                                    : measurement.growthResult.weight.level ===
-                                      'Average'
-                                    ? 'green'
-                                    : measurement.growthResult.weight.level ===
-                                      'Obese'
-                                    ? 'red'
-                                    : 'gray'
-                                }
-                                size='sm'
-                              >
-                                {measurement.growthResult.weight.level}
-                              </Badge>
-                            )}
-                          </HStack>
-                        )}
-                      </VStack>
-
-                      <Button
-                        size='sm'
-                        colorScheme='red'
-                        variant='ghost'
-                        onClick={() => handleDeleteGrowthData(measurement._id)}
-                      >
-                        Delete
-                      </Button>
-                    </Flex>
-                  </Box>
-                ))}
-
-                {growthData.growthData.length > 5 && (
-                  <Text
-                    fontSize='sm'
-                    color='gray.500'
-                    textAlign='center'
-                    mt={2}
-                  >
-                    Showing 5 of {growthData.growthData.length} measurements
-                  </Text>
-                )}
+              {/* RecentMeasurementCard - Now Using Our New Component */}
+              <Box mt={6}>
+                <RecentMeasurementCard
+                  childId={selectedChildId}
+                  growthData={growthData.growthData}
+                  refetch={refetchGrowthData}
+                />
               </Box>
             </GridItem>
           </Grid>
@@ -375,6 +249,7 @@ const GrowthChartPage = () => {
           isOpen={isFormOpen}
           onClose={onFormClose}
           childId={selectedChildId}
+          onSuccess={refetchGrowthData}
         />
       )}
     </Container>

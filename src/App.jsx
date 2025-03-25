@@ -3,6 +3,7 @@ import routes from './configs/routes';
 import NotFound from '@/pages/NotFound';
 import AuthProvider from '@/components/Auth/AuthProvider';
 import AuthCheck from '@/components/Auth/AuthCheck';
+import NoPermission from './pages/NoPermission';
 
 function App() {
   return (
@@ -23,6 +24,8 @@ function App() {
                       <AuthCheck
                         shouldLogin={item?.authSlice?.shouldLogin}
                         shouldLogout={item?.authSlice?.shouldLogout}
+                        requiredRole={item?.role}
+                        blockAdmin={item?.allowAdmin ? false : true} // Only allow admin if explicitly specified
                       >
                         <Component />
                       </AuthCheck>
@@ -33,6 +36,7 @@ function App() {
             </Route>
           );
         })}
+        <Route path='/no-permission' element={<NoPermission />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
     </AuthProvider>

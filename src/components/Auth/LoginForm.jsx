@@ -134,11 +134,11 @@ const LoginForm = () => {
           </Text>
 
           {/* Forgot Password Link */}
-          <Text textAlign='center' fontSize='sm' color='gray.600'>
+          {/* <Text textAlign='center' fontSize='sm' color='gray.600'>
             <Link to='/forgot-password' style={{ color: '#3498DB' }}>
               Forgot your password?
             </Link>
-          </Text>
+          </Text> */}
         </VStack>
       </Box>
     </Center>

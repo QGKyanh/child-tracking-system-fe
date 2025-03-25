@@ -15,6 +15,7 @@ import {
   AlertDescription,
   Text,
   VStack,
+  Button,
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import DoctorCard from '@/components/Doctor/DoctorCard';
@@ -23,36 +24,43 @@ import { useGetListChildrenQuery } from '@/services/child/childApi';
 
 const ListDoctorPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [sortOrder, setSortOrder] = useState(null); // null (no sort), 'asc', or 'desc'
 
-  // Fetch doctors - the backend should already return only doctors
   const {
     data: doctorsResponse,
     isLoading: isLoadingDoctors,
     error: doctorsError,
   } = useGetListUserQuery();
 
-  // Fetch children for the select options
   const {
     data: childrenResponse,
     isLoading: isLoadingChildren,
     error: childrenError,
   } = useGetListChildrenQuery();
 
-  // Extract users array from the response
   const doctors = doctorsResponse?.users || [];
 
-  // Extract children array from the response
   const children = childrenResponse?.children || [];
 
-  // Filter doctors based on search term
-  const filteredDoctors = doctors.filter(
-    doctor =>
-      doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      doctor.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredDoctors = doctors
+    .filter(
+      doctor =>
+        doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        doctor.email.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .sort((a, b) => {
+      if (!sortOrder) return 0; // No sorting if sortOrder is null
+      const ratingA = a.rating || 0; // Default to 0 if rating is missing
+      const ratingB = b.rating || 0; // Default to 0 if rating is missing
+      return sortOrder === 'asc' ? ratingA - ratingB : ratingB - ratingA;
+    });
 
   const handleSearch = e => {
     setSearchTerm(e.target.value);
+  };
+
+  const handleSort = () => {
+    setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc')); // Toggle between asc and desc
   };
 
   if (isLoadingDoctors || isLoadingChildren) {
@@ -82,18 +90,27 @@ const ListDoctorPage = () => {
           <Heading as='h1' size='xl' mb={4}>
             Find a Doctor
           </Heading>
-          <InputGroup maxW='500px'>
-            <InputLeftElement pointerEvents='none'>
-              <SearchIcon color='gray.300' />
-            </InputLeftElement>
-            <Input
-              type='text'
-              placeholder='Search doctors by name or email'
-              value={searchTerm}
-              onChange={handleSearch}
-              borderRadius='md'
-            />
-          </InputGroup>
+          <Box display='flex' alignItems='center' gap={4}>
+            <InputGroup maxW='500px'>
+              <InputLeftElement pointerEvents='none'>
+                <SearchIcon color='gray.300' />
+              </InputLeftElement>
+              <Input
+                type='text'
+                placeholder='Search doctors by name or email'
+                value={searchTerm}
+                onChange={handleSearch}
+                borderRadius='md'
+              />
+            </InputGroup>
+            <Button
+              colorScheme='teal'
+              variant='outline'
+              onClick={handleSort}
+            >
+              Sort by Rating {sortOrder === 'asc' ? '↑' : sortOrder === 'desc' ? '↓' : ''}
+            </Button>
+          </Box>
         </Box>
 
         {filteredDoctors.length > 0 ? (
