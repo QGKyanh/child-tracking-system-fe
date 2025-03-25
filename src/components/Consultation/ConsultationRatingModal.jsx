@@ -8,109 +8,198 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
-  FormControl,
-  FormLabel,
-  Input,
+  Box,
+  Text,
+  HStack,
+  VStack,
+  Textarea,
   useToast,
 } from '@chakra-ui/react';
+import { StarIcon } from '@chakra-ui/icons';
 import {
   useGetDetailConsultationByIdQuery,
   useCreateConsultationRatingMutation,
-  useUpdateConsultationRatingMutation,
-  useDeleteConsultationRatingMutation,
 } from '@/services/consultation/consultationApi';
 
 const ConsultationRatingModal = ({ isOpen, onClose, consultationId }) => {
   const { data: consultation, isLoading } =
     useGetDetailConsultationByIdQuery(consultationId);
   const [createRating] = useCreateConsultationRatingMutation();
-  const [updateRating] = useUpdateConsultationRatingMutation();
-  const [deleteRating] = useDeleteConsultationRatingMutation();
 
   const [rating, setRating] = useState(0);
+  const [hover, setHover] = useState(0);
+  const [feedback, setFeedback] = useState('');
   const toast = useToast();
 
+  // Rating labels and descriptions
+  const ratingLabels = {
+    1: 'Poor',
+    2: 'Fair',
+    3: 'Good',
+    4: 'Very Good',
+    5: 'Excellent',
+  };
+
+  const ratingDescriptions = {
+    1: 'The consultation did not meet my expectations.',
+    2: 'The consultation was adequate but could be improved.',
+    3: 'The consultation was satisfactory.',
+    4: 'The consultation was very helpful and informative.',
+    5: 'The consultation was exceptional in all aspects.',
+  };
+
   useEffect(() => {
-    if (consultation?.rating !== undefined) {
+    if (consultation?.rating !== undefined && consultation.rating > 0) {
       setRating(consultation.rating);
+    } else {
+      setRating(0);
     }
   }, [consultation]);
 
-  const handleCreateOrUpdate = async () => {
-    if (rating > 0) {
-      try {
-        await createRating({ id: consultationId, rating }).unwrap();
-        console.log('create');
-        toast({
-          title: 'Rating submitted!',
-          status: 'success',
-          duration: 2000,
-        });
-        onClose();
-      } catch (error) {
-        console.log(error);
-        toast({
-          title: 'Error updating rating',
-          status: 'error',
-          duration: 2000,
-        });
-      }
+  const handleSubmitRating = async () => {
+    if (rating === 0) {
+      toast({
+        title: 'Please select a rating',
+        status: 'warning',
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
     }
-  };
 
-  const handleDelete = async () => {
     try {
-      await deleteRating(consultationId).unwrap();
-      setRating(0);
-      toast({ title: 'Rating deleted!', status: 'warning', duration: 2000 });
+      await createRating({
+        id: consultationId,
+        rating,
+        feedback: feedback.trim() || undefined,
+      }).unwrap();
+
+      toast({
+        title: 'Thank you for your feedback!',
+        description: 'Your rating has been submitted successfully.',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
       onClose();
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast({
-        title: 'Error deleting rating',
+        title: 'Error submitting rating',
+        description: error?.data?.message || 'Something went wrong.',
         status: 'error',
-        duration: 2000,
+        duration: 3000,
+        isClosable: true,
       });
     }
   };
 
-  if (isLoading) return <p>Loading...</p>;
-
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Rate Your Consultation</ModalHeader>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered size='md'>
+      <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(5px)' />
+      <ModalContent borderRadius='lg'>
+        <ModalHeader
+          bg='blue.50'
+          borderTopRadius='lg'
+          color='blue.600'
+          textAlign='center'
+          fontSize='xl'
+          py={4}
+        >
+          Rate Your Consultation
+        </ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
-          <FormControl>
-            <FormLabel>Your Rating (1-5)</FormLabel>
-            <Input
-              type='number'
-              min='1'
-              max='5'
-              value={rating}
-              onChange={e => setRating(Number(e.target.value))}
-            />
-          </FormControl>
-        </ModalBody>
-        <ModalFooter>
-          {consultation?.rating ? (
-            <>
-              <Button colorScheme='blue' onClick={handleCreateOrUpdate} mr={3}>
-                Update Rating
-              </Button>
-              <Button colorScheme='red' onClick={handleDelete}>
-                Delete Rating
-              </Button>
-            </>
+
+        <ModalBody py={6}>
+          {isLoading ? (
+            <Box textAlign='center' py={4}>
+              Loading...
+            </Box>
           ) : (
-            <Button colorScheme='green' onClick={handleCreateOrUpdate}>
-              Submit Rating
-            </Button>
+            <VStack spacing={6} align='stretch'>
+              <Box>
+                <Text mb={3} fontWeight='medium'>
+                  How would you rate your experience?
+                </Text>
+
+                <HStack justify='center' my={4} spacing={3}>
+                  {[1, 2, 3, 4, 5].map(value => (
+                    <Box
+                      key={value}
+                      cursor='pointer'
+                      onClick={() => setRating(value)}
+                      onMouseEnter={() => setHover(value)}
+                      onMouseLeave={() => setHover(0)}
+                      transition='all 0.2s'
+                      transform={
+                        rating === value || hover === value
+                          ? 'scale(1.2)'
+                          : 'scale(1)'
+                      }
+                    >
+                      <StarIcon
+                        w={8}
+                        h={8}
+                        color={
+                          rating >= value || hover >= value
+                            ? 'yellow.400'
+                            : 'gray.200'
+                        }
+                      />
+                    </Box>
+                  ))}
+                </HStack>
+
+                <Box textAlign='center' minHeight='60px' transition='all 0.3s'>
+                  {(hover > 0 || rating > 0) && (
+                    <>
+                      <Text fontWeight='bold' color='blue.600' fontSize='lg'>
+                        {ratingLabels[hover || rating]}
+                      </Text>
+                      <Text fontSize='sm' color='gray.600'>
+                        {ratingDescriptions[hover || rating]}
+                      </Text>
+                    </>
+                  )}
+                </Box>
+              </Box>
+
+              <Box>
+                <Text mb={2} fontWeight='medium'>
+                  Additional feedback (optional)
+                </Text>
+                <Textarea
+                  placeholder='Share your thoughts about the consultation...'
+                  value={feedback}
+                  onChange={e => setFeedback(e.target.value)}
+                  minH='100px'
+                  resize='vertical'
+                  maxLength={500}
+                />
+                <Text fontSize='xs' textAlign='right' color='gray.500' mt={1}>
+                  {feedback.length}/500 characters
+                </Text>
+              </Box>
+            </VStack>
           )}
-          <Button onClick={onClose} ml={3}>
-            Close
+        </ModalBody>
+
+        <ModalFooter bg='gray.50' borderBottomRadius='lg'>
+          <Button variant='outline' mr={3} onClick={onClose}>
+            Cancel
+          </Button>
+          <Button
+            colorScheme='blue'
+            onClick={handleSubmitRating}
+            isDisabled={rating === 0 || isLoading}
+            boxShadow='sm'
+            _hover={{
+              transform: 'translateY(-2px)',
+              boxShadow: 'md',
+            }}
+            transition='all 0.2s'
+          >
+            Submit Rating
           </Button>
         </ModalFooter>
       </ModalContent>

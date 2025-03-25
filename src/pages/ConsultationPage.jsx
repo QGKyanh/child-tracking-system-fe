@@ -43,6 +43,7 @@ import {
 } from 'recharts';
 import { useUpdateConsultationStatusMutation } from '@/services/consultation/consultationApi';
 import ConsultationRatingModal from '@/components/Consultation/ConsultationRatingModal';
+import { StarIcon } from '@chakra-ui/icons';
 
 const ConsultationPage = () => {
   const user = useSelector(selectCurrentUser);
@@ -178,6 +179,27 @@ const ConsultationPage = () => {
         return 'blue';
     }
   };
+
+  const RatingStars = ({ rating }) => {
+    return (
+      <Box textAlign='center'>
+        <HStack spacing={1} justify='center'>
+          {[1, 2, 3, 4, 5].map(star => (
+            <StarIcon
+              key={star}
+              color={star <= rating ? 'yellow.400' : 'gray.200'}
+              w={4}
+              h={4}
+            />
+          ))}
+        </HStack>
+        <Text fontSize='xs' fontWeight='medium' mt={1} color='gray.600'>
+          {rating}/5
+        </Text>
+      </Box>
+    );
+  };
+
   return (
     <Flex
       direction='column'
@@ -332,29 +354,40 @@ const ConsultationPage = () => {
                           </Text>
                         </Box>
 
-                        {item.rating === 0 && (
-                          <Button
-                            size='sm'
-                            colorScheme='yellow'
-                            variant='outline'
-                            onClick={() => {
-                              setSelectedConsultationId(item._id); // Store the correct ID
-                              rateModal.onOpen();
-                            }}
-                            disabled={item.status === 'Ongoing'}
-                          >
-                            Rate consultation
-                          </Button>
-                        )}
-                        {item.rating !== 0 && (
-                          <Button
-                            disabled
-                            size='sm'
-                            colorScheme='green'
-                            variant='outline'
-                          >
-                            Rating successfully
-                          </Button>
+                        {item.status === 'Ended' && (
+                          <>
+                            {item.rating === 0 ? (
+                              <Button
+                                size='sm'
+                                colorScheme='yellow'
+                                leftIcon={<StarIcon />}
+                                onClick={() => {
+                                  setSelectedConsultationId(item._id);
+                                  rateModal.onOpen();
+                                }}
+                              >
+                                Rate consultation
+                              </Button>
+                            ) : (
+                              <Box
+                                bg='gray.50'
+                                p={2}
+                                borderRadius='md'
+                                boxShadow='sm'
+                                width='100%'
+                              >
+                                <RatingStars rating={item.rating} />
+                                <Text
+                                  fontSize='xs'
+                                  color='gray.500'
+                                  mt={1}
+                                  textAlign='center'
+                                >
+                                  Thank you for your feedback
+                                </Text>
+                              </Box>
+                            )}
+                          </>
                         )}
                       </VStack>
                     )}
