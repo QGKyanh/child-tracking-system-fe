@@ -41,6 +41,7 @@ export default function BlogPage() {
   // Gọi API với params
   const { data, isLoading, isError, error } = useGetListBlogsQuery({
     page,
+    size: 3,
     order,
     sortBy,
     search,
@@ -126,7 +127,7 @@ export default function BlogPage() {
         ) : (
           <>
             {/* Danh sách bài viết */}
-            <SimpleGrid columns={[1, 2, 3, 5]} spacing={6}>
+            <SimpleGrid columns={[1, 2, 3]} spacing={6}>
               {data?.posts?.map(blog => (
                 <Card
                   key={blog._id}

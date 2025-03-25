@@ -227,20 +227,22 @@ const ConsultationPage = () => {
                         >
                           Message
                         </Button>
-                        <Button
-                          size='sm'
-                          colorScheme='red'
-                          variant='outline'
-                          mt={2}
-                          isLoading={isUpdating}
-                          onClick={() => {
-                            console.log(item._id);
-                            console.log(typeof item._id);
-                            handleEndConsultation(item._id);
-                          }}
-                        >
-                          End Consultation
-                        </Button>
+                        {role !== 2 && (
+                          <Button
+                            size='sm'
+                            colorScheme='red'
+                            variant='outline'
+                            mt={2}
+                            isLoading={isUpdating}
+                            onClick={() => {
+                              console.log(item._id);
+                              console.log(typeof item._id);
+                              handleEndConsultation(item._id);
+                            }}
+                          >
+                            End Consultation
+                          </Button>
+                        )}
                       </>
                     )}
                     {item.status === 'Ended' && (

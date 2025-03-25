@@ -17,7 +17,7 @@ const blogApi = apiSlice.injectEndpoints({
       providesTags: ['Blog'],
     }),
     getBlogById: build.query({
-      query: ({ id }) => ({
+      query: id => ({
         url: `/posts/${id}`,
         method: 'GET',
       }),
