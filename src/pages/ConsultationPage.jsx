@@ -122,9 +122,23 @@ const ConsultationPage = () => {
   const calculateAge = birthDate => {
     const birth = new Date(birthDate);
     const now = new Date();
-    const years = now.getFullYear() - birth.getFullYear();
-    const months = now.getMonth() - birth.getMonth();
-    return `${years}y ${months < 0 ? months + 12 : months}m`;
+
+    let years = now.getFullYear() - birth.getFullYear();
+    let months = now.getMonth() - birth.getMonth();
+    let days = now.getDate() - birth.getDate();
+
+    if (days < 0) {
+      months -= 1;
+      const lastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+      days += lastMonth.getDate();
+    }
+
+    if (months < 0) {
+      years -= 1;
+      months += 12;
+    }
+
+    return `${years}y ${months}m ${days}d`;
   };
 
   return (
@@ -208,7 +222,7 @@ const ConsultationPage = () => {
                     )}
 
                     {item.status === 'Ongoing' && (
-                      <Box display={"flex"} gap={2}>
+                      <Box display={'flex'} gap={2}>
                         <Button
                           size='sm'
                           colorScheme='teal'
@@ -243,24 +257,42 @@ const ConsultationPage = () => {
                       </Box>
                     )}
                     {item.status === 'Ended' && (
-                      <Text fontWeight={700} color={"red"} pt={2}>This consultation has ended</Text>
+                      <Text fontWeight={700} color={'red'} pt={2}>
+                        This consultation has ended
+                      </Text>
                     )}
                   </Box>
 
                   <VStack align='flex-end' spacing={2}>
                     {role !== 2 && item?.requestDetails?.doctor && (
-                      <VStack spacing={1} align='center' mt={4} display={'flex'} flexDirection={'column'} gap={4}>
-                        <Box display={"flex"} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}>
+                      <VStack
+                        spacing={1}
+                        align='center'
+                        mt={4}
+                        display={'flex'}
+                        flexDirection={'column'}
+                        gap={4}
+                      >
+                        <Box
+                          display={'flex'}
+                          flexDirection={'column'}
+                          justifyContent={'center'}
+                          alignItems={'center'}
+                        >
                           <Avatar
                             size='sm'
                             name={item.requestDetails.doctor.name}
                             src={item.requestDetails.doctor.avatar}
                           />
-                          <Text fontSize='sm' color='gray.600' textAlign='center'>
+                          <Text
+                            fontSize='sm'
+                            color='gray.600'
+                            textAlign='center'
+                          >
                             Doctor: {item.requestDetails?.doctor.name}
                           </Text>
                         </Box>
-                        
+
                         <Button
                           size='sm'
                           colorScheme='yellow'
