@@ -21,6 +21,7 @@ import BlogDetail from '@/pages/BlogDetail';
 import SignUpPage from '@/pages/SignUpPage';
 import NoPermission from '@/pages/NoPermission';
 import EmailVerificationPage from '@/pages/EmailVerificationPage';
+import RequestDetailPage from '@/pages/RequestDetailPage';
 const routes = [
   {
     layout: MainLayout,
@@ -128,6 +129,12 @@ const routes = [
         component: BlogDetail,
         title: 'Blog',
         shouldLogin: false,
+      },
+      {
+        path: 'requests/:requestId',
+        component: RequestDetailPage,
+        title: 'Request Detail',
+        shouldLogin: true,
       },
     ],
   },
