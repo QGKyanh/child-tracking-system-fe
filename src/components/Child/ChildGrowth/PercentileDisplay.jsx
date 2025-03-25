@@ -62,7 +62,7 @@ const PercentileDisplay = ({ childData, latestGrowthData }) => {
                       colorScheme={getLevelColor(results.height.level)}
                       cursor='help'
                     >
-                      {results.height.percentile}th percentile
+                      {results.height.percentile}th
                       <InfoIcon ml={1} boxSize={3} />
                     </Badge>
                   </Tooltip>
@@ -85,7 +85,7 @@ const PercentileDisplay = ({ childData, latestGrowthData }) => {
                       colorScheme={getLevelColor(results.weight.level)}
                       cursor='help'
                     >
-                      {results.weight.percentile}th percentile
+                      {results.weight.percentile}th
                       <InfoIcon ml={1} boxSize={3} />
                     </Badge>
                   </Tooltip>
@@ -115,7 +115,7 @@ const PercentileDisplay = ({ childData, latestGrowthData }) => {
                           )}
                           cursor='help'
                         >
-                          {results.headCircumference.percentile}th percentile
+                          {results.headCircumference.percentile}th
                           <InfoIcon ml={1} boxSize={3} />
                         </Badge>
                       </Tooltip>
@@ -148,7 +148,7 @@ const PercentileDisplay = ({ childData, latestGrowthData }) => {
                         colorScheme={getLevelColor(results.bmi.level)}
                         cursor='help'
                       >
-                        {results.bmi.percentile}th percentile
+                        {results.bmi.percentile}th
                         <InfoIcon ml={1} boxSize={3} />
                       </Badge>
                     </Tooltip>
@@ -180,7 +180,7 @@ const PercentileDisplay = ({ childData, latestGrowthData }) => {
                             )}
                             cursor='help'
                           >
-                            {results.armCircumference.percentile}th percentile
+                            {results.armCircumference.percentile}th
                             <InfoIcon ml={1} boxSize={3} />
                           </Badge>
                         </Tooltip>
