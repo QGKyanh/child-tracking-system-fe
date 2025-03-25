@@ -11,6 +11,7 @@ import {
   VStack,
   Icon,
   useColorModeValue,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import {
@@ -20,6 +21,10 @@ import {
   FaUserMd,
   FaUsers,
 } from 'react-icons/fa';
+import MembershipList from '@/components/Membership/MembershipList';
+import CheckoutModal from '@/components/Membership/CheckoutModal';
+import { useGetListMembershipPackagesQuery } from '@/services/membership/membershipApi';
+import { useState } from 'react';
 
 const Feature = ({ title, text, icon }) => {
   return (
@@ -45,6 +50,32 @@ const Feature = ({ title, text, icon }) => {
 };
 
 const HomePage = () => {
+  const { data, isLoading, isError, error } = useGetListMembershipPackagesQuery(
+    { page: 1, size: 3 }
+  );
+  const [page, setPage] = useState(1);
+  const [size] = useState(3);
+  const checkoutModal = useDisclosure();
+  const [packageId, setPackageId] = useState(null);
+  const [type, setType] = useState(null);
+
+  const openCheckoutModal = (packageId, type) => {
+    setPackageId(packageId);
+    setType(type);
+    checkoutModal.onOpen();
+  };
+
+  const handleNextPage = () => {
+    if (data && page < data.totalPages) {
+      setPage(prev => prev + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (page > 1) {
+      setPage(prev => prev - 1);
+    }
+  };
   return (
     <Box>
       {/* Hero Section */}
@@ -200,185 +231,26 @@ const HomePage = () => {
             </Text>
           </VStack>
 
-          <SimpleGrid
-            columns={{ base: 1, md: 3 }}
-            spacing={10}
-            px={{ base: 5, md: 10 }}
-          >
-            {/* Basic Plan */}
-            <Box
-              maxW={'330px'}
-              w={'full'}
-              bg={useColorModeValue('white', 'gray.800')}
-              boxShadow={'2xl'}
-              rounded={'md'}
-              overflow={'hidden'}
-              mx='auto'
-            >
-              <Box p={6}>
-                <Stack spacing={0} align={'center'} mb={5}>
-                  <Heading size='md' fontWeight={500}>
-                    Basic
-                  </Heading>
-                  <Text color={'gray.500'}>Essential tracking features</Text>
-                </Stack>
-
-                <Stack
-                  direction={'row'}
-                  align={'center'}
-                  justify={'center'}
-                  mb={5}
-                >
-                  <Text fontWeight={800} fontSize={'3xl'}>
-                    $5
-                  </Text>
-                  <Text color={'gray.500'}>/month</Text>
-                </Stack>
-
-                <VStack spacing={2} mb={5}>
-                  <Text>✓ Growth tracking for one child</Text>
-                  <Text>✓ Basic growth charts</Text>
-                  <Text>✓ Data export (CSV)</Text>
-                  <Text color='gray.500'>✗ Multi-child support</Text>
-                  <Text color='gray.500'>✗ Doctor sharing</Text>
-                </VStack>
-
-                <Button
-                  w={'full'}
-                  mt={8}
-                  bg={useColorModeValue('#3498DB', '#3498DB')}
-                  color={'white'}
-                  rounded={'md'}
-                  _hover={{
-                    bg: '#2980B9',
-                  }}
-                  as={RouterLink}
-                  to='/plans/basic'
-                >
-                  Start Free Trial
-                </Button>
-              </Box>
-            </Box>
-
-            {/* Premium Plan */}
-            <Box
-              maxW={'330px'}
-              w={'full'}
-              bg={useColorModeValue('white', 'gray.800')}
-              boxShadow={'2xl'}
-              rounded={'md'}
-              overflow={'hidden'}
-              mx='auto'
-              border='2px'
-              borderColor='#3498DB'
-            >
-              <Box bg='#3498DB' px={6} py={2}>
-                <Text color='white' fontWeight='bold' textAlign='center'>
-                  MOST POPULAR
-                </Text>
-              </Box>
-              <Box p={6}>
-                <Stack spacing={0} align={'center'} mb={5}>
-                  <Heading size='md' fontWeight={500}>
-                    Premium
-                  </Heading>
-                  <Text color={'gray.500'}>Complete family solution</Text>
-                </Stack>
-
-                <Stack
-                  direction={'row'}
-                  align={'center'}
-                  justify={'center'}
-                  mb={5}
-                >
-                  <Text fontWeight={800} fontSize={'3xl'}>
-                    $15
-                  </Text>
-                  <Text color={'gray.500'}>/month</Text>
-                </Stack>
-
-                <VStack spacing={2} mb={5}>
-                  <Text>✓ Growth tracking for up to 5 children</Text>
-                  <Text>✓ Advanced growth charts</Text>
-                  <Text>✓ Growth predictions</Text>
-                  <Text>✓ Doctor data sharing</Text>
-                  <Text>✓ Smart alerts</Text>
-                </VStack>
-
-                <Button
-                  w={'full'}
-                  mt={8}
-                  bg={'#27AE60'}
-                  color={'white'}
-                  rounded={'md'}
-                  _hover={{
-                    bg: '#219653',
-                  }}
-                  as={RouterLink}
-                  to='/plans/premium'
-                >
-                  Start Free Trial
-                </Button>
-              </Box>
-            </Box>
-
-            {/* Professional Plan */}
-            <Box
-              maxW={'330px'}
-              w={'full'}
-              bg={useColorModeValue('white', 'gray.800')}
-              boxShadow={'2xl'}
-              rounded={'md'}
-              overflow={'hidden'}
-              mx='auto'
-            >
-              <Box p={6}>
-                <Stack spacing={0} align={'center'} mb={5}>
-                  <Heading size='md' fontWeight={500}>
-                    Professional
-                  </Heading>
-                  <Text color={'gray.500'}>For healthcare providers</Text>
-                </Stack>
-
-                <Stack
-                  direction={'row'}
-                  align={'center'}
-                  justify={'center'}
-                  mb={5}
-                >
-                  <Text fontWeight={800} fontSize={'3xl'}>
-                    $30
-                  </Text>
-                  <Text color={'gray.500'}>/month</Text>
-                </Stack>
-
-                <VStack spacing={2} mb={5}>
-                  <Text>✓ All Premium features</Text>
-                  <Text>✓ Unlimited patients</Text>
-                  <Text>✓ Clinical reports</Text>
-                  <Text>✓ Analytics dashboard</Text>
-                  <Text>✓ Professional support</Text>
-                </VStack>
-
-                <Button
-                  w={'full'}
-                  mt={8}
-                  bg={useColorModeValue('#8E44AD', '#8E44AD')}
-                  color={'white'}
-                  rounded={'md'}
-                  _hover={{
-                    bg: '#7D3C98',
-                  }}
-                  as={RouterLink}
-                  to='/plans/professional'
-                >
-                  Contact Sales
-                </Button>
-              </Box>
-            </Box>
-          </SimpleGrid>
+          {data && (
+            <MembershipList
+              memberships={data.packages || []}
+              currentPage={1}
+              totalPages={data.totalPages || 1}
+              onNext={handleNextPage}
+              onPrev={handlePrevPage}
+              onCheckout={openCheckoutModal}
+              type='HOME'
+            />
+          )}
         </Box>
-
+        <Box width={'full'}>
+          <CheckoutModal
+            isOpen={checkoutModal.isOpen}
+            onClose={checkoutModal.onClose}
+            packageId={packageId}
+            type={type}
+          />
+        </Box>
         {/* Testimonials Section */}
         <Box width='full'>
           <VStack spacing={5} textAlign='center' mb={10}>

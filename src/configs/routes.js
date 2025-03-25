@@ -17,6 +17,7 @@ import MyRequestPage from '@/pages/MyRequestPage';
 import FAQ from '@/pages/FAQ';
 import AboutUs from '@/pages/AboutUs';
 import BlogPage from '@/pages/BlogPage';
+import BlogDetail from '@/pages/BlogDetail';
 const routes = [
   {
     layout: MainLayout,
@@ -108,6 +109,12 @@ const routes = [
         path: '/blog',
         component: BlogPage,
         title: 'Blogs',
+        shouldLogin: false,
+      },
+      {
+        path: '/blog/:blogId',
+        component: BlogDetail,
+        title: 'Blog',
         shouldLogin: false,
       },
     ],
