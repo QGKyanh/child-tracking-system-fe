@@ -219,9 +219,9 @@ const Navbar = () => {
                       My Requests
                     </MenuItem>
                   )}
-                  <MenuItem as={RouterLink} to='/settings'>
+                  {/* <MenuItem as={RouterLink} to='/settings'>
                     Settings
-                  </MenuItem>
+                  </MenuItem> */}
                   <MenuItem onClick={handleLogout}>Logout</MenuItem>
                 </MenuList>
               </Menu>
