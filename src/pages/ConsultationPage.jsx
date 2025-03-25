@@ -43,6 +43,7 @@ import {
 } from 'recharts';
 import { useUpdateConsultationStatusMutation } from '@/services/consultation/consultationApi';
 import ConsultationRatingModal from '@/components/Consultation/ConsultationRatingModal';
+import { StarIcon } from '@chakra-ui/icons';
 
 const ConsultationPage = () => {
   const user = useSelector(selectCurrentUser);
@@ -57,13 +58,15 @@ const ConsultationPage = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [totalPages, setTotalPages] = useState(0);
+  const [statusFilter, setStatusFilter] = useState('All');
+
   const [updateConsultationStatus, { isLoading: isUpdating }] =
     useUpdateConsultationStatusMutation();
   const { data, isLoading, isError, error, refetch } =
     useGetConsultationsByUserIdQuery({
       userId: doctorId,
       page,
-      size: 8,
+      size: 10,
       order: 'descending',
       sortBy: 'date',
       as,
@@ -178,6 +181,27 @@ const ConsultationPage = () => {
         return 'blue';
     }
   };
+
+  const RatingStars = ({ rating }) => {
+    return (
+      <Box textAlign='center'>
+        <HStack spacing={1} justify='center'>
+          {[1, 2, 3, 4, 5].map(star => (
+            <StarIcon
+              key={star}
+              color={star <= rating ? 'yellow.400' : 'gray.200'}
+              w={4}
+              h={4}
+            />
+          ))}
+        </HStack>
+        <Text fontSize='xs' fontWeight='medium' mt={1} color='gray.600'>
+          {rating}/5
+        </Text>
+      </Box>
+    );
+  };
+
   return (
     <Flex
       direction='column'
@@ -202,6 +226,25 @@ const ConsultationPage = () => {
           }}
         />
       </Box>
+      <Flex gap={4} mb={4} direction={{ base: 'column', md: 'row' }}>
+
+
+  <Box>
+    <select
+      value={statusFilter}
+      onChange={e => setStatusFilter(e.target.value)}
+      style={{
+        padding: '10px',
+        borderRadius: '6px',
+        border: '1px solid #ccc',
+      }}
+    >
+      <option value='All'>All</option>
+      <option value='Ongoing'>Ongoing</option>
+      <option value='Ended'>Ended</option>
+    </select>
+  </Box>
+</Flex>
 
       {isLoading ? (
         <Flex justify='center' align='center' h='60vh'>
@@ -210,21 +253,25 @@ const ConsultationPage = () => {
       ) : (
         <VStack spacing={4}>
           {consultations
-            .filter(item => {
-              const title = item?.requestDetails?.title?.toLowerCase() || '';
-              const parent =
-                item?.requestDetails?.member?.name?.toLowerCase() || '';
-              const child =
-                item?.requestDetails?.children?.[0]?.name?.toLowerCase() || '';
-              const term = searchTerm.toLowerCase();
-              const doctorName = item?.doctor?.name?.toLowerCase() || '';
-              return (
-                title.includes(term) ||
-                parent.includes(term) ||
-                child.includes(term) ||
-                doctorName.includes(term)
-              );
-            })
+       .filter(item => {
+        const title = item?.requestDetails?.title?.toLowerCase() || '';
+        const parent = item?.requestDetails?.member?.name?.toLowerCase() || '';
+        const child = item?.requestDetails?.children?.[0]?.name?.toLowerCase() || '';
+        const term = searchTerm.toLowerCase();
+        const doctorName = item?.doctor?.name?.toLowerCase() || '';
+      
+        const matchesSearch =
+          title.includes(term) ||
+          parent.includes(term) ||
+          child.includes(term) ||
+          doctorName.includes(term);
+      
+        const matchesStatus =
+          statusFilter === 'All' || item.status === statusFilter;
+      
+        return matchesSearch && matchesStatus;
+      })
+      
             .map((item, index) => (
               <Box
                 key={item._id}
@@ -332,29 +379,40 @@ const ConsultationPage = () => {
                           </Text>
                         </Box>
 
-                        {item.rating === 0 && (
-                          <Button
-                            size='sm'
-                            colorScheme='yellow'
-                            variant='outline'
-                            onClick={() => {
-                              setSelectedConsultationId(item._id); // Store the correct ID
-                              rateModal.onOpen();
-                            }}
-                            disabled={item.status === 'Ongoing'}
-                          >
-                            Rate consultation
-                          </Button>
-                        )}
-                        {item.rating !== 0 && (
-                          <Button
-                            disabled
-                            size='sm'
-                            colorScheme='green'
-                            variant='outline'
-                          >
-                            Rating successfully
-                          </Button>
+                        {item.status === 'Ended' && (
+                          <>
+                            {item.rating === 0 ? (
+                              <Button
+                                size='sm'
+                                colorScheme='yellow'
+                                leftIcon={<StarIcon />}
+                                onClick={() => {
+                                  setSelectedConsultationId(item._id);
+                                  rateModal.onOpen();
+                                }}
+                              >
+                                Rate consultation
+                              </Button>
+                            ) : (
+                              <Box
+                                bg='gray.50'
+                                p={2}
+                                borderRadius='md'
+                                boxShadow='sm'
+                                width='100%'
+                              >
+                                <RatingStars rating={item.rating} />
+                                <Text
+                                  fontSize='xs'
+                                  color='gray.500'
+                                  mt={1}
+                                  textAlign='center'
+                                >
+                                  Thank you for your feedback
+                                </Text>
+                              </Box>
+                            )}
+                          </>
                         )}
                       </VStack>
                     )}
