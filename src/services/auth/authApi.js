@@ -50,6 +50,14 @@ const authApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Auth'],
     }),
+    confirmEmail: build.mutation({
+      query: data => ({
+        url: '/auth/confirm-email-verification-token',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Auth'],
+    }),
   }),
 });
 
@@ -60,4 +68,5 @@ export const {
   useLoginWithGoogleMutation,
   useLogoutMutation,
   useChangePasswordMutation,
+  useConfirmEmailMutation,
 } = authApi;

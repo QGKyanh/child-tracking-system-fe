@@ -572,7 +572,7 @@ const ProfileDetails = ({ user }) => {
         </Modal>
       </SimpleGrid>
 
-      <ReceiptList userId={user._id} toast={toast} />
+      <ReceiptList userId={user?._id} toast={toast} />
     </Box>
   );
 };

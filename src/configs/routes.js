@@ -20,6 +20,7 @@ import BlogPage from '@/pages/BlogPage';
 import BlogDetail from '@/pages/BlogDetail';
 import SignUpPage from '@/pages/SignUpPage';
 import NoPermission from '@/pages/NoPermission';
+import EmailVerificationPage from '@/pages/EmailVerificationPage';
 const routes = [
   {
     layout: MainLayout,
@@ -42,6 +43,11 @@ const routes = [
         path: '/plans',
         component: MembershipPage,
         title: 'Membership',
+      },
+      {
+        path: '/email-verification',
+        component: EmailVerificationPage,
+        title: 'Email Verification',
       },
       {
         path: '/profile',
