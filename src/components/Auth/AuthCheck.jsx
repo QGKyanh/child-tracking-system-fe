@@ -22,7 +22,7 @@ const AuthCheck = ({ children, shouldLogin, shouldLogout, requiredRole }) => {
     if (
       authState.isAuthenticated &&
       requiredRole !== undefined &&
-      !requiredRole.includes(userRole)
+      requiredRole !== userRole
     ) {
       return nav('/no-permission');
     }
