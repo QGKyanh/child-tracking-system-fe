@@ -79,11 +79,15 @@ const routes = [
         path: '/consultations',
         component: ConsultationPage,
         title: 'Consultations',
+        shouldLogin: true,
+        role: 1,
       },
       {
         path: '/consultation-chat/:consultationId',
         component: ConsultationChatPage,
         title: 'Consultation Chat Detail',
+        shouldLogin: true,
+        role: 1,
       },
       {
         path: '/contact',
