@@ -99,6 +99,7 @@ const routes = [
         component: MyRequestPage,
         title: 'My Requests',
         shouldLogin: true,
+        role: 0,
       },
       {
         path: '/faqs',
