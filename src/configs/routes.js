@@ -19,6 +19,7 @@ import AboutUs from '@/pages/AboutUs';
 import BlogPage from '@/pages/BlogPage';
 import BlogDetail from '@/pages/BlogDetail';
 import SignUpPage from '@/pages/SignUpPage';
+import NoPermission from '@/pages/NoPermission';
 const routes = [
   {
     layout: MainLayout,
@@ -146,6 +147,11 @@ const routes = [
         path: '/register',
         component: SignUpPage,
         title: 'Sign Up',
+      },
+      {
+        path: '/no-permission',
+        component: NoPermission,
+        title: 'Access Denied',
       },
     ],
   },

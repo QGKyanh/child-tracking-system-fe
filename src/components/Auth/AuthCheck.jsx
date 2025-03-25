@@ -2,19 +2,31 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-const AuthCheck = ({ children, shouldLogin, shouldLogout }) => {
+const AuthCheck = ({ children, shouldLogin, shouldLogout, requiredRole }) => {
   const nav = useNavigate();
   const authState = useSelector(state => state.authSlice);
+  const userRole = authState?.user?.role;
 
   useEffect(() => {
+    // Check for authentication
     if (!authState.isAuthenticated && shouldLogin) {
       return nav('/login?need_login=true');
     }
 
+    // Check for logout condition
     if (authState.isAuthenticated && shouldLogout) {
       return nav('/');
     }
-  }, [authState, nav, shouldLogout, shouldLogin]);
+
+    // Check for role permission
+    if (
+      authState.isAuthenticated &&
+      requiredRole !== undefined &&
+      userRole !== requiredRole
+    ) {
+      return nav('/no-permission');
+    }
+  }, [authState, nav, shouldLogout, shouldLogin, requiredRole, userRole]);
 
   return children;
 };

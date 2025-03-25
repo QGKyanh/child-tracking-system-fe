@@ -23,6 +23,7 @@ function App() {
                       <AuthCheck
                         shouldLogin={item?.authSlice?.shouldLogin}
                         shouldLogout={item?.authSlice?.shouldLogout}
+                        requiredRole={item?.role}
                       >
                         <Component />
                       </AuthCheck>
@@ -33,6 +34,7 @@ function App() {
             </Route>
           );
         })}
+        <Route path='/no-permission' element={<NoPermission />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
     </AuthProvider>
