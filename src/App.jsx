@@ -3,6 +3,7 @@ import routes from './configs/routes';
 import NotFound from '@/pages/NotFound';
 import AuthProvider from '@/components/Auth/AuthProvider';
 import AuthCheck from '@/components/Auth/AuthCheck';
+import NoPermission from './pages/NoPermission';
 
 function App() {
   return (

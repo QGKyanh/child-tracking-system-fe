@@ -167,7 +167,6 @@ const ConsultationPage = () => {
                 item?.requestDetails?.children?.[0]?.name?.toLowerCase() || '';
               const term = searchTerm.toLowerCase();
               const doctorName = item?.doctor?.name?.toLowerCase() || '';
-              console.log('consultations:', consultations);
               return (
                 title.includes(term) ||
                 parent.includes(term) ||
@@ -186,7 +185,7 @@ const ConsultationPage = () => {
                 maxW='4xl'
                 _hover={{ boxShadow: 'lg' }}
               >
-                <Flex justify='space-between' align='flex-start' mb={2}>
+                <Flex justify='space-between' align='flex-start'>
                   <Box>
                     <Text fontWeight='bold'>
                       {index + 1}.{' '}
@@ -209,7 +208,7 @@ const ConsultationPage = () => {
                     )}
 
                     {item.status === 'Ongoing' && (
-                      <>
+                      <Box display={"flex"} gap={2}>
                         <Button
                           size='sm'
                           colorScheme='teal'
@@ -235,32 +234,42 @@ const ConsultationPage = () => {
                             mt={2}
                             isLoading={isUpdating}
                             onClick={() => {
-                              console.log(item._id);
-                              console.log(typeof item._id);
                               handleEndConsultation(item._id);
                             }}
                           >
                             End Consultation
                           </Button>
                         )}
-                      </>
+                      </Box>
                     )}
                     {item.status === 'Ended' && (
-                      <Text>This consultation has ended</Text>
+                      <Text fontWeight={700} color={"red"} pt={2}>This consultation has ended</Text>
                     )}
                   </Box>
 
                   <VStack align='flex-end' spacing={2}>
                     {role !== 2 && item?.requestDetails?.doctor && (
-                      <VStack spacing={1} align='center' mt={4}>
-                        <Avatar
+                      <VStack spacing={1} align='center' mt={4} display={'flex'} flexDirection={'column'} gap={4}>
+                        <Box display={"flex"} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}>
+                          <Avatar
+                            size='sm'
+                            name={item.requestDetails.doctor.name}
+                            src={item.requestDetails.doctor.avatar}
+                          />
+                          <Text fontSize='sm' color='gray.600' textAlign='center'>
+                            Doctor: {item.requestDetails?.doctor.name}
+                          </Text>
+                        </Box>
+                        
+                        <Button
                           size='sm'
-                          name={item.requestDetails.doctor.name}
-                          src={item.requestDetails.doctor.avatar}
-                        />
-                        <Text fontSize='sm' color='gray.600' textAlign='center'>
-                          Doctor: {item.requestDetails?.doctor.name}
-                        </Text>
+                          colorScheme='yellow'
+                          variant='outline'
+                          onClick={() => handleOpen(item)}
+                          disabled={item.status === 'Ongoing' ? true : false}
+                        >
+                          Rate consultation
+                        </Button>
                       </VStack>
                     )}
                     {role === 2 && (
