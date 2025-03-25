@@ -19,7 +19,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaInstagram, FaYoutube } from 'react-icons/fa';
 
 const Footer = () => {
-  // Color scheme that matches the navbar
   const bgColor = useColorModeValue('#f8f9fa', '#2C3E50');
   const textColor = useColorModeValue('#2C3E50', '#ECF0F1');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
@@ -41,14 +40,8 @@ const Footer = () => {
             <Link as={RouterLink} to='/about'>
               About Us
             </Link>
-            <Link as={RouterLink} to='/team'>
-              Our Team
-            </Link>
-            <Link as={RouterLink} to='/careers'>
-              Careers
-            </Link>
             <Link as={RouterLink} to='/contact'>
-              Contact Us
+              Contact
             </Link>
           </Stack>
 
@@ -62,12 +55,6 @@ const Footer = () => {
             <Link as={RouterLink} to='/faqs'>
               FAQs
             </Link>
-            <Link as={RouterLink} to='/user-guide'>
-              User Guide
-            </Link>
-            <Link as={RouterLink} to='/research'>
-              Research
-            </Link>
           </Stack>
 
           <Stack align={'flex-start'}>
@@ -76,15 +63,6 @@ const Footer = () => {
             </Heading>
             <Link as={RouterLink} to='/plans'>
               Pricing Plans
-            </Link>
-            <Link as={RouterLink} to='/benefits'>
-              Benefits
-            </Link>
-            <Link as={RouterLink} to='/testimonials'>
-              Testimonials
-            </Link>
-            <Link as={RouterLink} to='/partnership'>
-              Partner Program
             </Link>
           </Stack>
 
@@ -112,6 +90,7 @@ const Footer = () => {
         </SimpleGrid>
       </Container>
 
+      {/* Phần bottom footer giữ nguyên */}
       <Box borderTopWidth={1} borderStyle={'solid'} borderColor={borderColor}>
         <Container
           as={Stack}
