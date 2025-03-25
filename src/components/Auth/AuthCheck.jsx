@@ -2,10 +2,19 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-const AuthCheck = ({ children, shouldLogin, shouldLogout, requiredRole }) => {
+const AuthCheck = ({
+  children,
+  shouldLogin,
+  shouldLogout,
+  requiredRole,
+  blockAdmin = true,
+}) => {
   const nav = useNavigate();
   const authState = useSelector(state => state.authSlice);
   const userRole = authState?.user?.role ?? 0;
+
+  // Define admin role constant
+  const ADMIN_ROLE = 1;
 
   useEffect(() => {
     // Check for authentication
@@ -18,7 +27,12 @@ const AuthCheck = ({ children, shouldLogin, shouldLogout, requiredRole }) => {
       return nav('/');
     }
 
-    // Check for role permission
+    // Block admin users from accessing the site (unless this check is disabled)
+    if (authState.isAuthenticated && blockAdmin && userRole === ADMIN_ROLE) {
+      return nav('/no-permission');
+    }
+
+    // Check for role permission (for other role-based access)
     if (
       authState.isAuthenticated &&
       requiredRole !== undefined &&
@@ -26,7 +40,15 @@ const AuthCheck = ({ children, shouldLogin, shouldLogout, requiredRole }) => {
     ) {
       return nav('/no-permission');
     }
-  }, [authState, nav, shouldLogout, shouldLogin, requiredRole, userRole]);
+  }, [
+    authState,
+    nav,
+    shouldLogout,
+    shouldLogin,
+    requiredRole,
+    userRole,
+    blockAdmin,
+  ]);
 
   return children;
 };

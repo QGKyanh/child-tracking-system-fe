@@ -29,6 +29,7 @@ const routes = [
         isIndex: true,
         component: HomePage,
         title: 'Home',
+        allowAdmin: true,
       },
       {
         path: '/doctor/requests',

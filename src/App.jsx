@@ -25,6 +25,7 @@ function App() {
                         shouldLogin={item?.authSlice?.shouldLogin}
                         shouldLogout={item?.authSlice?.shouldLogout}
                         requiredRole={item?.role}
+                        blockAdmin={item?.allowAdmin ? false : true} // Only allow admin if explicitly specified
                       >
                         <Component />
                       </AuthCheck>
