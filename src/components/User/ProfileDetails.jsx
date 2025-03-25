@@ -31,7 +31,8 @@ import { setUser } from '@/services/auth/authSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import ReceiptList from './ReceiptList';
-
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '@/services/auth/authSlice';
 const ProfileDetails = ({ user }) => {
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -40,6 +41,8 @@ const ProfileDetails = ({ user }) => {
     useChangePasswordMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const storeUser = useSelector(selectCurrentUser);
 
   const [formData, setFormData] = useState({
     name: user?.name || '',
@@ -305,222 +308,222 @@ const ProfileDetails = ({ user }) => {
             </VStack>
           </Box>
         </VStack>
+        {storeUser?.role === 1 &&
+          <VStack spacing={6} align='stretch'>
+            {/* Subscription Box */}
+            <Box
+              p={6}
+              borderWidth={1}
+              borderRadius='lg'
+              bg='white'
+              boxShadow='md'
+            >
+              <Text fontSize='xl' fontWeight='bold' mb={4} color='teal.600'>
+                Membership Details
+              </Text>
 
-        <VStack spacing={6} align='stretch'>
-          {/* Subscription Box */}
-          <Box
-            p={6}
-            borderWidth={1}
-            borderRadius='lg'
-            bg='white'
-            boxShadow='md'
-          >
-            <Text fontSize='xl' fontWeight='bold' mb={4} color='teal.600'>
-              Membership Details
-            </Text>
+              {user?.subscription?.currentPlan ? (
+                <VStack align='stretch' spacing={4}>
+                  {/* Plan Card */}
+                  <Box
+                    p={4}
+                    borderWidth={1}
+                    borderRadius='md'
+                    borderColor='teal.200'
+                    bg='teal.50'
+                  >
+                    <Text fontSize='lg' fontWeight='semibold' color='teal.700'>
+                      {user.subscription.currentPlanDetails?.name}
+                    </Text>
+                    <Text mt={1} color='gray.600'>
+                      {user.subscription.currentPlanDetails?.description}
+                    </Text>
 
-            {user?.subscription?.currentPlan ? (
-              <VStack align='stretch' spacing={4}>
-                {/* Plan Card */}
-                <Box
-                  p={4}
-                  borderWidth={1}
-                  borderRadius='md'
-                  borderColor='teal.200'
-                  bg='teal.50'
-                >
-                  <Text fontSize='lg' fontWeight='semibold' color='teal.700'>
-                    {user.subscription.currentPlanDetails?.name}
-                  </Text>
-                  <Text mt={1} color='gray.600'>
-                    {user.subscription.currentPlanDetails?.description}
-                  </Text>
-
-                  <Box mt={3} display='flex' justifyContent='space-between'>
-                    <Box>
-                      <Text fontSize='sm' color='gray.500'>
-                        Price
-                      </Text>
-                      <Text fontWeight='medium'>
-                        {new Intl.NumberFormat('vi-VN', {
-                          style: 'currency',
-                          currency: 'VND',
-                        }).format(
-                          user.subscription.currentPlanDetails?.price?.value
-                        )}
-                      </Text>
-                    </Box>
-                    <Box>
-                      <Text fontSize='sm' color='gray.500'>
-                        Duration
-                      </Text>
-                      <Text fontWeight='medium'>
-                        {user.subscription.currentPlanDetails?.duration?.value}{' '}
-                        {user.subscription.currentPlanDetails?.duration?.unit?.toLowerCase()}
-                      </Text>
-                    </Box>
-                  </Box>
-                </Box>
-
-                {/* Validity Period */}
-                <Box
-                  p={3}
-                  bg='gray.50'
-                  borderRadius='md'
-                  borderLeftWidth={4}
-                  borderLeftColor='teal.400'
-                >
-                  <Text fontSize='sm' fontWeight='semibold' mb={1}>
-                    Active Period
-                  </Text>
-                  <Box display='flex' justifyContent='space-between'>
-                    <Box>
-                      <Text fontSize='xs' color='gray.500'>
-                        Start Date
-                      </Text>
-                      <Text fontSize='sm'>
-                        {formatDate(user.subscription.startDate)}
-                      </Text>
-                    </Box>
-                    <Box>
-                      <Text fontSize='xs' color='gray.500'>
-                        End Date
-                      </Text>
-                      <Text fontSize='sm'>
-                        {formatDate(user.subscription.endDate)}
-                      </Text>
-                    </Box>
-                  </Box>
-                </Box>
-
-                {/* Features */}
-                <Box mt={2}>
-                  <Text fontSize='sm' fontWeight='semibold' mb={2}>
-                    Plan Features
-                  </Text>
-                  <SimpleGrid columns={2} spacing={2}>
-                    <Box>
-                      <Text fontSize='xs' color='gray.500'>
-                        Post Limit
-                      </Text>
-                      <Text fontSize='sm' fontWeight='medium'>
-                        {user.subscription.currentPlanDetails?.postLimit ||
-                          'Unlimited'}
-                      </Text>
-                    </Box>
-                    <Box>
-                      <Text fontSize='xs' color='gray.500'>
-                        Updates Limit
-                      </Text>
-                      <Text fontSize='sm' fontWeight='medium'>
-                        {user.subscription.currentPlanDetails
-                          ?.updateChildDataLimit || 'Unlimited'}
-                      </Text>
-                    </Box>
-                  </SimpleGrid>
-                </Box>
-
-                <Text fontSize='xl' fontWeight='bold' mb={4} color='teal.600'>
-                  Future Plan Details
-                </Text>
-                {user?.subscription?.futurePlan ? (
-                  <>
-                    {/* Plan Card */}
-                    <Box
-                      p={4}
-                      borderWidth={1}
-                      borderRadius='md'
-                      borderColor='teal.200'
-                      bg='teal.50'
-                    >
-                      <Text
-                        fontSize='lg'
-                        fontWeight='semibold'
-                        color='teal.700'
-                      >
-                        {user.subscription.futurePlanDetails?.name}
-                      </Text>
-                      <Text mt={1} color='gray.600'>
-                        {user.subscription.futurePlanDetails?.description}
-                      </Text>
-
-                      <Box mt={3} display='flex' justifyContent='space-between'>
-                        <Box>
-                          <Text fontSize='sm' color='gray.500'>
-                            Price
-                          </Text>
-                          <Text fontWeight='medium'>
-                            {new Intl.NumberFormat('vi-VN', {
-                              style: 'currency',
-                              currency: 'VND',
-                            }).format(
-                              user.subscription.futurePlanDetails?.price?.value
-                            )}
-                          </Text>
-                        </Box>
-                        <Box>
-                          <Text fontSize='sm' color='gray.500'>
-                            Duration
-                          </Text>
-                          <Text fontWeight='medium'>
-                            {
-                              user.subscription.futurePlanDetails?.duration
-                                ?.value
-                            }{' '}
-                            {user.subscription.futurePlanDetails?.duration?.unit?.toLowerCase()}
-                          </Text>
-                        </Box>
+                    <Box mt={3} display='flex' justifyContent='space-between'>
+                      <Box>
+                        <Text fontSize='sm' color='gray.500'>
+                          Price
+                        </Text>
+                        <Text fontWeight='medium'>
+                          {new Intl.NumberFormat('vi-VN', {
+                            style: 'currency',
+                            currency: 'VND',
+                          }).format(
+                            user.subscription.currentPlanDetails?.price?.value
+                          )}
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Text fontSize='sm' color='gray.500'>
+                          Duration
+                        </Text>
+                        <Text fontWeight='medium'>
+                          {user.subscription.currentPlanDetails?.duration?.value}{' '}
+                          {user.subscription.currentPlanDetails?.duration?.unit?.toLowerCase()}
+                        </Text>
                       </Box>
                     </Box>
-
-                    {/* Features */}
-                    <Box mt={2}>
-                      <Text fontSize='sm' fontWeight='semibold' mb={2}>
-                        Plan Features
-                      </Text>
-                      <SimpleGrid columns={2} spacing={2}>
-                        <Box>
-                          <Text fontSize='xs' color='gray.500'>
-                            Post Limit
-                          </Text>
-                          <Text fontSize='sm' fontWeight='medium'>
-                            {user.subscription.futurePlanDetails?.postLimit ||
-                              'Unlimited'}
-                          </Text>
-                        </Box>
-                        <Box>
-                          <Text fontSize='xs' color='gray.500'>
-                            Updates Limit
-                          </Text>
-                          <Text fontSize='sm' fontWeight='medium'>
-                            {user.subscription.futurePlanDetails
-                              ?.updateChildDataLimit || 'Unlimited'}
-                          </Text>
-                        </Box>
-                      </SimpleGrid>
-                    </Box>
-                  </>
-                ) : (
-                  <Box textAlign='center' py={4}>
-                    <Text color='gray.500' mb={4}>
-                      You don't have an any future membership plan
-                    </Text>
                   </Box>
-                )}
-              </VStack>
-            ) : (
-              <Box textAlign='center' py={4}>
-                <Text color='gray.500' mb={4}>
-                  You don't have an active membership
-                </Text>
-                <Button colorScheme='teal' size='sm'>
-                  Upgrade Now
-                </Button>
-              </Box>
-            )}
-          </Box>
-        </VStack>
 
+                  {/* Validity Period */}
+                  <Box
+                    p={3}
+                    bg='gray.50'
+                    borderRadius='md'
+                    borderLeftWidth={4}
+                    borderLeftColor='teal.400'
+                  >
+                    <Text fontSize='sm' fontWeight='semibold' mb={1}>
+                      Active Period
+                    </Text>
+                    <Box display='flex' justifyContent='space-between'>
+                      <Box>
+                        <Text fontSize='xs' color='gray.500'>
+                          Start Date
+                        </Text>
+                        <Text fontSize='sm'>
+                          {formatDate(user.subscription.startDate)}
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Text fontSize='xs' color='gray.500'>
+                          End Date
+                        </Text>
+                        <Text fontSize='sm'>
+                          {formatDate(user.subscription.endDate)}
+                        </Text>
+                      </Box>
+                    </Box>
+                  </Box>
+
+                  {/* Features */}
+                  <Box mt={2}>
+                    <Text fontSize='sm' fontWeight='semibold' mb={2}>
+                      Plan Features
+                    </Text>
+                    <SimpleGrid columns={2} spacing={2}>
+                      <Box>
+                        <Text fontSize='xs' color='gray.500'>
+                          Post Limit
+                        </Text>
+                        <Text fontSize='sm' fontWeight='medium'>
+                          {user.subscription.currentPlanDetails?.postLimit ||
+                            'Unlimited'}
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Text fontSize='xs' color='gray.500'>
+                          Updates Limit
+                        </Text>
+                        <Text fontSize='sm' fontWeight='medium'>
+                          {user.subscription.currentPlanDetails
+                            ?.updateChildDataLimit || 'Unlimited'}
+                        </Text>
+                      </Box>
+                    </SimpleGrid>
+                  </Box>
+
+                  <Text fontSize='xl' fontWeight='bold' mb={4} color='teal.600'>
+                    Future Plan Details
+                  </Text>
+                  {user?.subscription?.futurePlan ? (
+                    <>
+                      {/* Plan Card */}
+                      <Box
+                        p={4}
+                        borderWidth={1}
+                        borderRadius='md'
+                        borderColor='teal.200'
+                        bg='teal.50'
+                      >
+                        <Text
+                          fontSize='lg'
+                          fontWeight='semibold'
+                          color='teal.700'
+                        >
+                          {user.subscription.futurePlanDetails?.name}
+                        </Text>
+                        <Text mt={1} color='gray.600'>
+                          {user.subscription.futurePlanDetails?.description}
+                        </Text>
+
+                        <Box mt={3} display='flex' justifyContent='space-between'>
+                          <Box>
+                            <Text fontSize='sm' color='gray.500'>
+                              Price
+                            </Text>
+                            <Text fontWeight='medium'>
+                              {new Intl.NumberFormat('vi-VN', {
+                                style: 'currency',
+                                currency: 'VND',
+                              }).format(
+                                user.subscription.futurePlanDetails?.price?.value
+                              )}
+                            </Text>
+                          </Box>
+                          <Box>
+                            <Text fontSize='sm' color='gray.500'>
+                              Duration
+                            </Text>
+                            <Text fontWeight='medium'>
+                              {
+                                user.subscription.futurePlanDetails?.duration
+                                  ?.value
+                              }{' '}
+                              {user.subscription.futurePlanDetails?.duration?.unit?.toLowerCase()}
+                            </Text>
+                          </Box>
+                        </Box>
+                      </Box>
+
+                      {/* Features */}
+                      <Box mt={2}>
+                        <Text fontSize='sm' fontWeight='semibold' mb={2}>
+                          Plan Features
+                        </Text>
+                        <SimpleGrid columns={2} spacing={2}>
+                          <Box>
+                            <Text fontSize='xs' color='gray.500'>
+                              Post Limit
+                            </Text>
+                            <Text fontSize='sm' fontWeight='medium'>
+                              {user.subscription.futurePlanDetails?.postLimit ||
+                                'Unlimited'}
+                            </Text>
+                          </Box>
+                          <Box>
+                            <Text fontSize='xs' color='gray.500'>
+                              Updates Limit
+                            </Text>
+                            <Text fontSize='sm' fontWeight='medium'>
+                              {user.subscription.futurePlanDetails
+                                ?.updateChildDataLimit || 'Unlimited'}
+                            </Text>
+                          </Box>
+                        </SimpleGrid>
+                      </Box>
+                    </>
+                  ) : (
+                    <Box textAlign='center' py={4}>
+                      <Text color='gray.500' mb={4}>
+                        You don't have an any future membership plan
+                      </Text>
+                    </Box>
+                  )}
+                </VStack>
+              ) : (
+                <Box textAlign='center' py={4}>
+                  <Text color='gray.500' mb={4}>
+                    You don't have an active membership
+                  </Text>
+                  <Button colorScheme='teal' size='sm'>
+                    Upgrade Now
+                  </Button>
+                </Box>
+              )}
+            </Box>
+          </VStack>
+        }
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
@@ -571,8 +574,9 @@ const ProfileDetails = ({ user }) => {
           </ModalContent>
         </Modal>
       </SimpleGrid>
-
-      <ReceiptList userId={user._id} toast={toast} />
+      {storeUser?.role === 1 &&
+        <ReceiptList userId={user?._id} toast={toast} />
+      }
     </Box>
   );
 };

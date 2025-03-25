@@ -123,7 +123,7 @@ const HomePage = () => {
                   bg={'#3498DB'}
                   _hover={{ bg: '#2980B9' }}
                   as={RouterLink}
-                  to='/register'
+                  to='/children'
                 >
                   Get Started
                 </Button>
@@ -133,7 +133,7 @@ const HomePage = () => {
                   fontWeight={'normal'}
                   px={6}
                   as={RouterLink}
-                  to='/features'
+                  to='/about'
                 >
                   Learn More
                 </Button>
@@ -154,7 +154,7 @@ const HomePage = () => {
                 h={'100%'}
                 maxH={'500px'}
                 src={
-                  'https://images.unsplash.com/photo-1534614971-6be99a7a3ffd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
+                  'https://cdn.cdnparenting.com/articles/2018/04/212743915-H.webp'
                 }
                 borderRadius='lg'
               />

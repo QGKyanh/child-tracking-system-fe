@@ -35,6 +35,34 @@ const consultationApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Consultations'],
     }),
+    // Create a consultation rating
+    createConsultationRating: build.mutation({
+      query: ({ id, rating }) => ({
+        url: `/users/consultation/${id}/rating`,
+        method: 'POST',
+        body: { rating },
+      }),
+      invalidatesTags: ['Consultations'],
+    }),
+
+    // Update a consultation rating
+    updateConsultationRating: build.mutation({
+      query: ({ id, rating }) => ({
+        url: `/users/consultation/${id}/rating`,
+        method: 'PUT',
+        body: { rating },
+      }),
+      invalidatesTags: ['Consultations'],
+    }),
+
+    // Remove a consultation rating
+    deleteConsultationRating: build.mutation({
+      query: id => ({
+        url: `/users/consultation/${id}/rating`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Consultations'],
+    }),
   }),
 });
 
@@ -43,4 +71,7 @@ export const {
   useGetListConsultationByIdQuery,
   useGetDetailConsultationByIdQuery,
   useDeleteConsultationMutation,
+  useCreateConsultationRatingMutation,
+  useUpdateConsultationRatingMutation,
+  useDeleteConsultationRatingMutation,
 } = consultationApi;
