@@ -9,7 +9,7 @@ import MembershipPage from '@/pages/MembershipPage';
 import GrowthChartPage from '@/pages/GrowthChartPage';
 import ProfilePage from '@/pages/ProfilePage';
 import DoctorRequestPage from '@/pages/DoctorRequestPage';
-import ChildDetail from '@/components/Child/ChildDetail';
+import ChildDetail from '@/pages/ChildDetailPage';
 import ConsultationPage from '@/pages/ConsultationPage';
 import ConsultationChatPage from '@/pages/ConsultationChatPage';
 import ListDoctorPage from '@/pages/ListDoctorPage';
