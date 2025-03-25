@@ -75,26 +75,26 @@ const Navbar = () => {
     ...(userRole !== 2
       ? [
           { label: 'Home', href: '/' },
-          {
-            label: 'Features',
-            children: [
-              {
-                label: 'Growth Tracking',
-                subLabel: "Track your child's growth metrics",
-                href: '/features/growth-tracking',
-              },
-              {
-                label: 'Growth Charts',
-                subLabel: 'Visualize development progress',
-                href: '/features/growth-charts',
-              },
-              {
-                label: 'Data Sharing',
-                subLabel: 'Share with healthcare providers',
-                href: '/features/data-sharing',
-              },
-            ],
-          },
+          // {
+          //   label: 'Features',
+          //   children: [
+          //     {
+          //       label: 'Growth Tracking',
+          //       subLabel: "Track your child's growth metrics",
+          //       href: '/features/growth-tracking',
+          //     },
+          //     {
+          //       label: 'Growth Charts',
+          //       subLabel: 'Visualize development progress',
+          //       href: '/features/growth-charts',
+          //     },
+          //     {
+          //       label: 'Data Sharing',
+          //       subLabel: 'Share with healthcare providers',
+          //       href: '/features/data-sharing',
+          //     },
+          //   ],
+          // },
           { label: 'Membership Plans', href: '/plans' },
           {
             label: 'Resources',
