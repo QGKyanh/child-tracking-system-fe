@@ -27,6 +27,8 @@ import {
 } from '@chakra-ui/react';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import { format } from 'date-fns';
+import CommentBox from '@/components/Comments/CommentBox';
+import CommentList from '@/components/Comments/CommentList';
 
 export default function BlogDetail() {
   const { blogId } = useParams();
@@ -129,7 +131,10 @@ export default function BlogDetail() {
                 },
               }}
             />
-
+            {/* Comment Box and Comment List */}
+            <Divider my={6} />
+            <CommentBox postId={blogId} />
+            <CommentList postId={blogId} />
             {/* Image Modal */}
             <Modal isOpen={isOpen} onClose={onClose} size='6xl'>
               <ModalOverlay />
