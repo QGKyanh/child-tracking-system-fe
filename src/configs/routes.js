@@ -60,7 +60,7 @@ const routes = [
         component: ChildDetail,
         title: 'Child Detail',
         shouldLogin: true,
-        role: 0,
+        // role: 0,
       },
       {
         path: '/growth-charts',
