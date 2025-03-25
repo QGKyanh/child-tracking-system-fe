@@ -3,7 +3,13 @@ import { apiSlice } from '@/api/apiSlice';
 const blogApi = apiSlice.injectEndpoints({
   endpoints: build => ({
     getListBlogs: build.query({
-      query: ({ page = 1, size = 5, order = '', sortBy = '', search = '' } = {}) => ({
+      query: ({
+        page = 1,
+        size = 5,
+        order = '',
+        sortBy = '',
+        search = '',
+      } = {}) => ({
         url: `/posts?page=${page}&size=${size}&search=${search}&order=${order}&sortBy=${sortBy}`,
         method: 'GET',
       }),
