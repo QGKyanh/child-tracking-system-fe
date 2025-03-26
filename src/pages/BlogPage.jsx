@@ -105,11 +105,14 @@ export default function BlogPage() {
               />
             </InputRightElement>
           </InputGroup>
-          {userRole === 0 && (
+          {/* {userRole === 0 && (
             <Button onClick={blogModal.onOpen} colorScheme='blue'>
               Post Blogs
             </Button>
-          )}
+          )} */}
+          <Button onClick={blogModal.onOpen} colorScheme='blue'>
+            Post Blogs
+          </Button>
         </SimpleGrid>
         <BlogModal isOpen={blogModal.isOpen} handleClose={blogModal.onClose} />
         {/* Loading & Error State */}
