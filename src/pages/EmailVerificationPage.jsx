@@ -107,13 +107,6 @@ const EmailVerificationPage = () => {
                 'There was an error verifying your email. Please try again or request a new verification link.'}
             </AlertDescription>
           </Alert>
-          <Button
-            colorScheme='teal'
-            variant='outline'
-            onClick={() => navigate('/resend-verification')}
-          >
-            Resend Verification Email
-          </Button>
         </VStack>
       </Container>
     );

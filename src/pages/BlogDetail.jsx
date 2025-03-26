@@ -37,7 +37,7 @@ import { useGetUserInfoQuery } from '@/services/auth/authApi';
 import { useDeleteCommentMutation } from '@/services/comments/commentApi';
 
 import { useSelector } from 'react-redux';
-import {selectCurrentUser,} from '@/services/auth/authSlice';
+import { selectCurrentUser } from '@/services/auth/authSlice';
 export default function BlogDetail() {
   const { blogId } = useParams();
   const navigate = useNavigate();
@@ -181,7 +181,7 @@ export default function BlogDetail() {
             <CommentBox postId={blogId} />
             <CommentList
               postId={blogId}
-              userId={userInfo._id || ''}
+              userId={userInfo?._id || ''}
               deleteComment={handleDeleteComment}
             />
             {/* Image Modal */}

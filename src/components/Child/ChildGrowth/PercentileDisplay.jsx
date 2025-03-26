@@ -30,7 +30,7 @@ const PercentileDisplay = ({ childData, latestGrowthData }) => {
     }
   };
 
-  // Check if we have growth result data
+  // Check if we have required data
   if (!childData || !latestGrowthData || !latestGrowthData.growthResult) {
     return (
       <Box p={4} borderWidth='1px' borderRadius='lg'>
@@ -55,7 +55,7 @@ const PercentileDisplay = ({ childData, latestGrowthData }) => {
             <StatLabel>Height</StatLabel>
             <StatNumber>{latestGrowthData.height} cm</StatNumber>
             <StatHelpText>
-              {results.height.percentile >= 0 && (
+              {results.height?.percentile >= 0 && (
                 <>
                   <Tooltip label={results.height.description} placement='top'>
                     <Badge
@@ -78,7 +78,7 @@ const PercentileDisplay = ({ childData, latestGrowthData }) => {
             <StatLabel>Weight</StatLabel>
             <StatNumber>{latestGrowthData.weight} kg</StatNumber>
             <StatHelpText>
-              {results.weight.percentile >= 0 && (
+              {results.weight?.percentile >= 0 && (
                 <>
                   <Tooltip label={results.weight.description} placement='top'>
                     <Badge
@@ -102,34 +102,32 @@ const PercentileDisplay = ({ childData, latestGrowthData }) => {
               <StatLabel>Head Circumference</StatLabel>
               <StatNumber>{latestGrowthData.headCircumference} cm</StatNumber>
               <StatHelpText>
-                {results.headCircumference.percentile >= 0 &&
-                  results.headCircumference.percentile !== -1 && (
-                    <>
-                      <Tooltip
-                        label={results.headCircumference.description}
-                        placement='top'
+                {results.headCircumference?.percentile >= 0 && (
+                  <>
+                    <Tooltip
+                      label={results.headCircumference.description}
+                      placement='top'
+                    >
+                      <Badge
+                        colorScheme={getLevelColor(
+                          results.headCircumference.level
+                        )}
+                        cursor='help'
                       >
-                        <Badge
-                          colorScheme={getLevelColor(
-                            results.headCircumference.level
-                          )}
-                          cursor='help'
-                        >
-                          {results.headCircumference.percentile}th
-                          <InfoIcon ml={1} boxSize={3} />
-                        </Badge>
-                      </Tooltip>
-                      <Text fontSize='sm' mt={1}>
-                        {results.headCircumference.level}
-                      </Text>
-                    </>
-                  )}
+                        {results.headCircumference.percentile}th
+                        <InfoIcon ml={1} boxSize={3} />
+                      </Badge>
+                    </Tooltip>
+                    <Text fontSize='sm' mt={1}>
+                      {results.headCircumference.level}
+                    </Text>
+                  </>
+                )}
               </StatHelpText>
             </Stat>
           )}
         </SimpleGrid>
 
-        {/* BMI Stat */}
         <Box pt={2} borderTopWidth='1px' borderTopColor='gray.200'>
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
             <Stat>
@@ -141,7 +139,7 @@ const PercentileDisplay = ({ childData, latestGrowthData }) => {
                 ).toFixed(1)}
               </StatNumber>
               <StatHelpText>
-                {results.bmi.percentile >= 0 && (
+                {results.bmi?.percentile >= 0 && (
                   <>
                     <Tooltip label={results.bmi.description} placement='top'>
                       <Badge
@@ -160,38 +158,35 @@ const PercentileDisplay = ({ childData, latestGrowthData }) => {
               </StatHelpText>
             </Stat>
 
-            {latestGrowthData.armCircumference &&
-              results.armCircumference.percentile !== -1 && (
-                <Stat>
-                  <StatLabel>Arm Circumference</StatLabel>
-                  <StatNumber>
-                    {latestGrowthData.armCircumference} cm
-                  </StatNumber>
-                  <StatHelpText>
-                    {results.armCircumference.percentile >= 0 && (
-                      <>
-                        <Tooltip
-                          label={results.armCircumference.description}
-                          placement='top'
+            {latestGrowthData.armCircumference && (
+              <Stat>
+                <StatLabel>Arm Circumference</StatLabel>
+                <StatNumber>{latestGrowthData.armCircumference} cm</StatNumber>
+                <StatHelpText>
+                  {results.armCircumference?.percentile >= 0 && (
+                    <>
+                      <Tooltip
+                        label={results.armCircumference.description}
+                        placement='top'
+                      >
+                        <Badge
+                          colorScheme={getLevelColor(
+                            results.armCircumference.level
+                          )}
+                          cursor='help'
                         >
-                          <Badge
-                            colorScheme={getLevelColor(
-                              results.armCircumference.level
-                            )}
-                            cursor='help'
-                          >
-                            {results.armCircumference.percentile}th
-                            <InfoIcon ml={1} boxSize={3} />
-                          </Badge>
-                        </Tooltip>
-                        <Text fontSize='sm' mt={1}>
-                          {results.armCircumference.level}
-                        </Text>
-                      </>
-                    )}
-                  </StatHelpText>
-                </Stat>
-              )}
+                          {results.armCircumference.percentile}th
+                          <InfoIcon ml={1} boxSize={3} />
+                        </Badge>
+                      </Tooltip>
+                      <Text fontSize='sm' mt={1}>
+                        {results.armCircumference.level}
+                      </Text>
+                    </>
+                  )}
+                </StatHelpText>
+              </Stat>
+            )}
           </SimpleGrid>
         </Box>
 

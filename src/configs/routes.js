@@ -100,6 +100,8 @@ const routes = [
         path: '/contact',
         component: ListDoctorPage,
         title: 'Contact',
+        shouldLogin: true,
+        role: 0,
       },
       {
         path: '/user/requests',

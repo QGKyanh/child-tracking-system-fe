@@ -25,9 +25,9 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import { useUpdateUserMutation } from '@/services/user/userApi';
-import { useChangePasswordMutation } from '@/services/auth/authApi';
+import { useChangePasswordMutation, useLogoutMutation } from '@/services/auth/authApi';
 import { FaUserCircle, FaEye, FaEyeSlash } from 'react-icons/fa';
-import { setUser } from '@/services/auth/authSlice';
+import { logout, setUser } from '@/services/auth/authSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import ReceiptList from './ReceiptList';
@@ -117,6 +117,8 @@ const ProfileDetails = ({ user }) => {
       });
     }
   };
+  
+  const [logoutMutation, { isLoading: isLoggingOut }] = useLogoutMutation();
 
   const handleChangePassword = async () => {
     if (passwordData.newPassword !== passwordData.confirmNewPassword) {
@@ -144,9 +146,9 @@ const ProfileDetails = ({ user }) => {
         isClosable: true,
       });
 
-      setTimeout(() => {
-        navigate('/logout');
-      }, 2000);
+      const result = await logoutMutation().unwrap();
+      dispatch(logout());
+      navigate('/login')
     } catch (err) {
       toast({
         title: 'Error',
