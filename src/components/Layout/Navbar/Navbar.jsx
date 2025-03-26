@@ -123,7 +123,7 @@ const Navbar = () => {
           { label: 'Consultations', href: '/consultations' },
           { label: 'Blog', href: '/blog' },
         ]),
-    { label: 'Contact', href: '/contact' },
+    ...(userRole !== 2 ? [{ label: 'Contact', href: '/contact' }] : []),
   ];
 
   const bgColor = useColorModeValue('#ffffff', '#283747');
