@@ -62,7 +62,7 @@ export default function MembershipList({
                     <Text fontWeight={800} fontSize='3xl'>
                       {membership.price.unit === 'USD'
                         ? `$${membership.price.value}`
-                        : `${membership.price.value}VNĐ`}{' '}
+                        : `${new Intl.NumberFormat('vi-VN').format(membership.price.value)}VNĐ`}{' '}
                       {/* Updated for flexibility */}
                     </Text>
                     <Text color='gray.500'>
