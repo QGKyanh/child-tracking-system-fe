@@ -25,7 +25,10 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import { useUpdateUserMutation } from '@/services/user/userApi';
-import { useChangePasswordMutation, useLogoutMutation } from '@/services/auth/authApi';
+import {
+  useChangePasswordMutation,
+  useLogoutMutation,
+} from '@/services/auth/authApi';
 import { FaUserCircle, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { logout, setUser } from '@/services/auth/authSlice';
 import { useDispatch } from 'react-redux';
@@ -117,7 +120,7 @@ const ProfileDetails = ({ user }) => {
       });
     }
   };
-  
+
   const [logoutMutation, { isLoading: isLoggingOut }] = useLogoutMutation();
 
   const handleChangePassword = async () => {
@@ -148,7 +151,7 @@ const ProfileDetails = ({ user }) => {
 
       const result = await logoutMutation().unwrap();
       dispatch(logout());
-      navigate('/login')
+      navigate('/login');
     } catch (err) {
       toast({
         title: 'Error',
@@ -584,7 +587,7 @@ const ProfileDetails = ({ user }) => {
           </ModalContent>
         </Modal>
       </SimpleGrid>
-      {storeUser?.role === 1 && (
+      {storeUser?.role === 0 && (
         <ReceiptList userId={user?._id} toast={toast} />
       )}
     </Box>
