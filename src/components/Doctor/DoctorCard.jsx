@@ -69,7 +69,6 @@ const DoctorCard = ({ doctor, children }) => {
         isClosable: true,
       });
 
-      
       setTitle('');
       setSelectedChildren([]);
       onClose();
@@ -85,40 +84,42 @@ const DoctorCard = ({ doctor, children }) => {
     }
   };
 
-  
   const handleSelectChild = e => {
     const selectedId = e.target.value;
     if (selectedId && !selectedChildren.includes(selectedId)) {
       setSelectedChildren([...selectedChildren, selectedId]);
     }
-    
+
     e.target.value = '';
   };
 
-  
   const removeChild = childId => {
     setSelectedChildren(selectedChildren.filter(id => id !== childId));
   };
 
-  
   const getChildName = childId => {
     const child = children.find(c => c._id === childId);
     return child ? child.name : 'Unknown';
   };
 
-  const renderStarRating = (rating) => {
-    if (!rating && rating !== 0) return <Text fontSize="sm" color="gray.500">No rating</Text>;
-    const maxRating = 5; 
-    const filledStars = Math.round(rating); 
+  const renderStarRating = rating => {
+    if (!rating && rating !== 0)
+      return (
+        <Text fontSize='sm' color='gray.500'>
+          No rating
+        </Text>
+      );
+    const maxRating = 5;
+    const filledStars = Math.round(rating);
     const stars = [];
 
     for (let i = 1; i <= maxRating; i++) {
       stars.push(
         <Icon
           key={i}
-          as={i <= filledStars ? FaStar : FaRegStar} 
-          color={i <= filledStars ? 'yellow.400' : 'gray.300'} 
-          boxSize={5} 
+          as={i <= filledStars ? FaStar : FaRegStar}
+          color={i <= filledStars ? 'yellow.400' : 'gray.300'}
+          boxSize={5}
         />
       );
     }
