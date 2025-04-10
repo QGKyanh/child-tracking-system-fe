@@ -122,6 +122,7 @@ const Navbar = () => {
           { label: 'Doctor Requests', href: '/doctor/requests' },
           { label: 'Consultations', href: '/consultations' },
           { label: 'Blog', href: '/blog' },
+          { label: 'Schedules', href: '/doctor/schedules' },
         ]),
     ...(userRole !== 2 ? [{ label: 'Contact', href: '/contact' }] : []),
   ];

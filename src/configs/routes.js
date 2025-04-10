@@ -22,6 +22,7 @@ import SignUpPage from '@/pages/SignUpPage';
 import NoPermission from '@/pages/NoPermission';
 import EmailVerificationPage from '@/pages/EmailVerificationPage';
 import RequestDetailPage from '@/pages/RequestDetailPage';
+import DoctorSchedulePage from '@/pages/DoctorSchedulePage';
 const routes = [
   {
     layout: MainLayout,
@@ -37,6 +38,13 @@ const routes = [
         path: '/doctor/requests',
         component: DoctorRequestPage,
         title: 'Doctor Requests',
+        shouldLogin: true,
+        role: 2,
+      },
+      {
+        path: '/doctor/schedules',
+        component: DoctorSchedulePage,
+        title: 'Doctor Schedules',
         shouldLogin: true,
         role: 2,
       },

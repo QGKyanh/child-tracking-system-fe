@@ -62,6 +62,53 @@ const doctorApi = apiSlice.injectEndpoints({
       transformResponse: res => res.data || res,
       providesTags: ['Child'],
     }),
+
+    // Get doctor schedule by ID
+    getSchedule: build.query({
+      query: id => ({
+        url: `/doctor-schedules/${id}`,
+        method: 'GET',
+      }),
+      providesTags: ['Schedule'],
+    }),
+
+    // Get all doctor schedules
+    getScheduleByUserId: build.query({
+      query: id => ({
+        url: `/doctor-schedules/users/${id}`,
+        method: 'GET',
+      }),
+      providesTags: ['Schedule'],
+    }),
+
+    // Create schedule
+    createSchedule: build.mutation({
+      query: data => ({
+        url: `/doctor-schedules`,
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Schedule'],
+    }),
+
+    // Update schedule
+    updateSchedule: build.mutation({
+      query: data => ({
+        url: `/doctor-schedules/${data._id}`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: ['Schedule'],
+    }),
+
+    // Delete schedule
+    deleteSchedule: build.mutation({
+      query: id => ({
+        url: `/doctor-schedules/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Schedule'],
+    }),
   }),
 });
 
@@ -70,4 +117,9 @@ export const {
   useUpdateRequestStatusMutation,
   useGetRequestByIdQuery,
   useGetChildGrowthDataQuery,
+  useGetScheduleQuery,
+  useGetScheduleByUserIdQuery,
+  useCreateScheduleMutation,
+  useUpdateScheduleMutation,
+  useDeleteScheduleMutation
 } = doctorApi;
